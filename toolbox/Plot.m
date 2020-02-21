@@ -1,5 +1,101 @@
+% PLOT - ...
 %
+%   obj = Plot, constructor
+%           Output:
+%       'obj': object of the class.
 %
+%   obj = createLayout(obj, m, n), uses built-in (tiledLayout() function)
+%       validation and creates m by n tiled layout, saves number of tiles
+%       and assignes False flags (since tiles are not defined yet) to each
+%       of them.
+%           Input:
+%       'obj': object of the class.
+%       'm', 'n': positive integer values, size of a tiledLayout.
+%           Output:
+%       'obj': object of the class.
+%
+%   obj = defineTile(obj, title, axesNames, size), validates input, assigns
+%       data to the tile structure, then adds it to the tiles array and
+%       updates definedTiles flag.
+%           Input:
+%       'obj': object of the class.
+%       'title': string of characters, title of a tile.
+%       'axesNames': array of 2 or 3 char or string type entries, names of
+%       each of the axis of the tile.
+%       'size': array of 4 or 6 numerical entries, size of the tile.
+%           Output:
+%       'obj': object of the class.
+%
+%   obj = addPlot(obj, tileNo, pltArray, lStyle, lColor, lWidth, name),
+%       validates input, adds plot to the tile existing in the tiles array.
+%           Input:
+%       'obj': object of the class.
+%       'tileNo': integer value between 1 and n*m, dictating to which tile
+%       the data passed to the function must be assigned.
+%       'pltArray': 2 or 3 dimensional nested array with coordinates of the
+%       plot.
+%       'lStyle': *LineStyle property of the plot.
+%       'lColor': *LineColor property of the plot.
+%       'lWidth': *LineWidth property of the plot.
+%       'name': name of the plot to be displayed in the legend.
+%           Output:
+%       'obj': object of the class.
+%
+%   obj = addSurf(obj, tileNo, srfArray, eColor, lStyle, fColor, fAlpha, 
+%                 name),
+%       validates input, adds plot to the tile existing in the tiles array.
+%           Input:
+%       'obj': object of the class.
+%       'tileNo': integer value between 1 and n*m, dictating to which tile
+%       'srfArray': 3 dimensional array containing mesh (matrices) of the
+%       surface.
+%       'eColor': **EdgeColor property of the surf.
+%       'lStyle': **LineStyle property of the surf.
+%       'fColor': **FaceColor property of the surf.
+%       'fAlpha': **FaceAlpha property of the surf.
+%       'name': name of the surface to be displayed in the legend.
+%           Output:
+%       'obj': object of the class.
+%
+%   drawLayout(obj), ...
+%           Input:
+%       'obj': object of the class.
+%
+%   drawPlot(~, object, dimensions), (private method) ...
+%           Input:
+%       'object': ...
+%       'dimensions': ...
+%
+%   drawSurf(~, object), (private method) ...
+%           Input:
+%       'object': ...
+%
+%   drawTile(obj, tile), (private method) ...
+%           Input:
+%       'obj': object of the class.
+%       'tile': ...
+%
+%   Limitations:
+%       The class can only be fed with certain type of structure -
+%       struct('coordinates', [], 'size', []). Therefore, it is recommended
+%       to use other classes of the EhrenfestToolbox to generate data. The
+%       class cannot generate animations (gifs).
+%
+%   Examples:
+%       ...
+%
+%   Use:
+%       It is recommended to use other classes of the EhrenfestToolbox to 
+%       generate data, though, it can be fed with any arrays of appropriate
+%       dimensionality - e.g. if the array with coordinates is
+%       two-dimensional then the array with axes size must have 4 entries.
+%
+%   See also:
+%       PARABOLOID, SPIRAL, CIRCLE, WAVEFUNCTION, QUANTUMN,
+%       ENERGYAPPROXIMATION
+%
+%   Patryk Jesionka, 2019
+
 %      INSTRUCTION
 % Call in the order:
 % 1. createLayout
@@ -140,7 +236,7 @@ classdef Plot
             tile.dimensions = length(axesNames);
             tile.plots = {};
             
-            % Adds structure to the tiles array
+            % Adds structure to the tile array
             obj.tiles{length(obj.tiles)+1} = tile;
             
             % Set the first false flag in definedTiles to true
