@@ -1,6 +1,56 @@
+% WAVEFUNCTION - 
+%
+%   obj = Wavefunction(radius, quantumN), constructor,
+%       validates user input, defines base properties of the wavefunction
+%       and its domains.
+%           Input:
+%       'radius': nonnegative number, radius of a circle to create
+%       'quantumN': nonnegative, even integer value, quantum number for
+%       frequency, period and wavedomain of the function.
+%           Output:
+%       'obj': object of the class.
+%
+%   wavefuncion = getWavefunc(obj, time, arithmeticType), validates input,
+%       generates wavefunction of the type specified and returns the
+%       structure.
+%           Input:
+%       'obj': object of the class.
+%       'time': nonnegative value, wavefunction is time dependent therefore
+%       the output coordinates vary with time parameter.
+%       'arithmeticType': 'sin' or 'cos' string, specifies which of the
+%       component of the wavefunction must be returned with the structure.
+%           Output:
+%       'wavefunction': structure containing 'coordinates' and 'size'
+%       arrays.
+%
+%   Limitations:
+%       Data passed to the functions must be physically sensible - e.g.
+%       time cannot be negative, quantum number must be positive, even
+%       number.
+%
+%   Examples:
+%       Plot 'sin' component of a wavefunction for the time, t=0 and
+%       quantum state described by n=6 for an electron travelling around
+%       the circle of radius, r=0.1
+%           wavefunctionHandle = Wavefunction(0.1, 6);
+%           wavefunction = getWavefunc(wavefunctionHandle, 0, 'sin');
+%           plot3(wavefunction.coordinates{1}, wavefunction.coordinates{2},
+%                 wavefunction.coordinates{3});
+%           axis(wavefunction.size)
+%
+%   Use:
+%       Such a structure ('wavefunction') can be fed into standard MATLAB
+%       functions (e.g. plot(), plot3()). However, its purpose is to input
+%       data into the PlotToolbox's PLOT.
+%
+%   See also:
+%       PARABOLOID, SPIRAL, CIRCLE, PLOT, QUANTUMN, ENERGYAPPROXIMATION
+%
+%   Patryk Jesionka, 2019
+
 classdef Wavefunction
     properties
-        radius {mustBeNumeric} % radius of the electron's path
+        radius {mustBePositive} % radius of the electron's path
         quantumN {mustBeInteger} % quantum number n
         hbar = 1.05*10.^(-34); % modified Planck's constant
         me = 9.1094*10.^(-31); % electron rest mass
@@ -16,13 +66,15 @@ classdef Wavefunction
     end
     methods
         function obj = Wavefunction(radius, quantumN)
+            % Input validation
             obj.radius = radius;
             obj.quantumN = quantumN;
-            % verification whether n_ (quantum no.) is even or not
+            % verification whether quantumN is even or not
             if ~(mod(obj.quantumN, 2) == 0)
                 error("Quantum number n must be even!");
             end
             
+            % Calcualating the ratio
             obj.rat = obj.hbar/obj.me;
             
             % defining wave properties
@@ -35,7 +87,7 @@ classdef Wavefunction
             obj.waveDomain = 0:(obj.q*obj.quantumN*2*pi):(obj.quantumN*2*pi);
         end
         
-        function wavefunc = plotWavefunc(obj, time, arithmeticType)
+        function wavefuncion = getWavefunc(obj, time, arithmeticType)
             % Input validation
             if time < 0
                 error("Time must be a positive value!");
@@ -56,12 +108,12 @@ classdef Wavefunction
                 obj.wavefunc.coordinates = {xCos yCos zCos};
             end
             
-            % Defining size of the plot
+            % Defining the size of the plot
             pltBounds = obj.radius + obj.amp;
             obj.wavefunc.size = [-pltBounds pltBounds -pltBounds pltBounds -pltBounds pltBounds];
             
-            % Returning structure
-            wavefunc = obj.wavefunc;
+            % Returning the structure
+            wavefuncion = obj.wavefunc;
         end
     end
 end
