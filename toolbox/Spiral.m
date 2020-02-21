@@ -63,7 +63,7 @@
 %       data into the PlotToolbox's PLOT.
 %
 %   See also:
-%       PARABOLOID, SPIRAL, WAVEFUNCTION, PLOT, QUANTUMN,
+%       PARABOLOID, CIRCLE, WAVEFUNCTION, PLOT, QUANTUMN,
 %       ENERGYAPPROXIMATION
 %
 %   Patryk Jesionka, 2019
