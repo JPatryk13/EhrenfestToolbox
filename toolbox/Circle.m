@@ -10,8 +10,8 @@
 %       'radius': nonnegative number, radius of a circle to create
 %       'centrePoint': two- or three-dimensional array of numeric values,
 %       dimensionality forces dimensionality of the 'circle' structure's
-%       arrays and thus whether the plot will be 2D or 3D; it is centre of 
-%       a circle.
+%       arrays and thus whether the plot will be 2D or 3D; it is the centre 
+%       of a circle.
 %       'fixedCoordinate': must be a character 'x', 'y' or 'z'; the circle
 %       plotted in 3D though as a plot has two dimensions - the letter here
 %       states the axis in along which the circle should be flat. It is
@@ -27,18 +27,23 @@
 %
 %   Limitations:
 %       Generated circle cannot be oriented freely in 3D space. I.e.
-%       the axis going through the centre (perpendicular to the surface 
+%       the axis going through the centre (perpendicular to the surface the
 %       circle is plotted on) must be parallel to one of the axes.
 %
 %   Examples:
 %       Create a circle in 2D (x-y plane) with radius 5, centred at [0, 0]
 %           circleHandle = Circle(5, [0 0], 'z')
 %           circle = getCircle(circleHandle)
+%           plot(circle.coordinates{1}, circle.coordinates{2})
+%           axis(circle.size)
 %       Create a circle in 3D (fixed x coordinate) with radius 3.14,
 %       centred at [0, 3.14, 3.14] - it is plotted on the y-z surface at
 %       x = 0.
 %           circleHandle = Circle(3.14, [0 3.14 3.14], 'x')
 %           circle = getCircle(circleHandle)
+%           plot(circle.coordinates{1}, circle.coordinates{2}, 
+%                circle.coordinates{3})
+%           axis(circle.size)
 %
 %   Use:
 %       Such a structure ('circle') can be fed into standard MATLAB
@@ -46,7 +51,8 @@
 %       data into the PlotToolbox's PLOT.
 %
 %   See also:
-%       PARABOLOID, SPIRAL, WAVEFUNCTION, PLOT, QUANTUMN
+%       PARABOLOID, SPIRAL, WAVEFUNCTION, PLOT, QUANTUMN,
+%       ENERGYAPPROXIMATION
 %
 %   Patryk Jesionka, 2019
  
