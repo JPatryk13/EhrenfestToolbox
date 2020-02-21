@@ -1,4 +1,6 @@
-% WAVEFUNCTION - 
+% WAVEFUNCTION - generating data required to plot a flower-shaped graph of
+% the wavefunction. It draws the aplitude in the same plane as the circular
+% trajectory of a particle.
 %
 %   obj = Wavefunction(radius, quantumN), constructor,
 %       validates user input, defines base properties of the wavefunction
