@@ -1,11 +1,11 @@
 % SPIRAL - generating data required to plot a spiral-shaped trajectory
 % in two- or three-dimensional space.
 %
-%   obj = Spiral(rMin, rMax, centrePoint, fixedCoordinate, noOfLaps), constructor,
-%       validates user input, generates arrays of coordinates*, based on the
-%       'fixedCoordinate' decides on the orientation of the spiral in 3D 
-%       space and assigns data (with determined prefered size of the plot) 
-%       to the structure.
+%   obj = Spiral(rMin, rMax, centrePoint, fixedCoordinate, noOfLaps), 
+%       constructor, validates user input, generates arrays of 
+%       coordinates*, based on the 'fixedCoordinate' decides on the 
+%       orientation of the spiral in 3D space and assigns data (with 
+%       determined preferred size of the plot) to the structure.
 %       *Approach similar to the Circle class'; however, radius range and
 %       number of laps is a factor in the coordinates generation.
 %           Input:
@@ -70,7 +70,7 @@
 
 classdef Spiral
     properties
-        % rmax (later r), rmin: 'starting' and 'ending' radii of the spiral
+        % rMax (later r), rMin: 'starting' and 'ending' radii of the spiral
         rMin {mustBePositive}
         rMax {mustBePositive}
         % Constant coordinate - determines orientation of the spiral
@@ -91,7 +91,7 @@ classdef Spiral
         function [a, b] = generateSpiral(obj)
             % Function returns a pair of arrays with coordinates
 
-            % Array of radii going from rmax to rmin with a step dr
+            % Array of radii going from rMax to rMin with a step dr
             % Step dr normalised so that the r and ang arrays both have the
             % same size
             dr = (obj.rMax - obj.rMin)/(length(obj.ang)-1);
