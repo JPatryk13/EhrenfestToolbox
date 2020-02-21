@@ -1,18 +1,18 @@
-% CIRCLE - generating data required to plot a cricle in two- or
+% CIRCLE - generating data required to plot a circle in two- or
 % three-dimensional space.
 %
 %   obj = Circle(radius, centrePoint, fixedCoordinate), constructor,
 %       validates user input, generates arrays of coordinates, based on the
-%       'fixedCoordinate' decindes on the orientation of the circle in 3D 
-%       space and assignes data (with determined prefered size of the plot) 
+%       'fixedCoordinate' decides on the orientation of the circle in 3D 
+%       space and assigns data (with determined preferred size of the plot) 
 %       to the structure.
 %           Input:
 %       'radius': nonnegative number, radius of a circle to create
-%       'centrPoint': two- or three-dimensional array of numeric values,
+%       'centrePoint': two- or three-dimensional array of numeric values,
 %       dimensionality forces dimensionality of the 'circle' structure's
 %       arrays and thus whether the plot will be 2D or 3D; it is centre of 
-%       a cricle.
-%       'fixedCoordinate': must be a character 'x', 'y' or 'z'; the cricle
+%       a circle.
+%       'fixedCoordinate': must be a character 'x', 'y' or 'z'; the circle
 %       plotted in 3D though as a plot has two dimensions - the letter here
 %       states the axis in along which the circle should be flat. It is
 %       related to the limitation of the class.
@@ -22,7 +22,7 @@
 %   circle = getCircle(obj), extract generated data
 %           Input:
 %       'obj': object of the class
-%           Outpur:
+%           Output:
 %       'circle': structure containing 'coordinates' and 'size' arrays.
 %
 %   Limitations:
@@ -37,7 +37,7 @@
 %       Create a circle in 3D (fixed x coordinate) with radius 3.14,
 %       centred at [0, 3.14, 3.14] - it is plotted on the y-z surface at
 %       x = 0.
-%           circleHandle = Cricle(3.14, [0 3.14 3.14], 'x')
+%           circleHandle = Circle(3.14, [0 3.14 3.14], 'x')
 %           circle = getCircle(circleHandle)
 %
 %   Use:
@@ -49,7 +49,7 @@
 %       PARABOLOID, SPIRAL, WAVEFUNCTION, PLOT, QUANTUMN
 %
 %   Patryk Jesionka, 2019
-
+ 
 classdef Circle
     properties
        % Radius of a circle
@@ -60,14 +60,14 @@ classdef Circle
        x {mustBeNumeric} = 0
        y {mustBeNumeric} = 0
        z {mustBeNumeric} = 0
-
+ 
        % Structure to be returned with coordinates and dimensions of the
        % plot
        circle = struct('coordinates', [], 'size', [])
     end
     methods
         % Creating an object, validating user input, generating and saving 
-        % data in calss' properties
+        % data in class' properties
         function obj = Circle(radius, centrePoint, fixedCoordinate)
             % Input validation
             obj.radius = radius;
@@ -80,7 +80,7 @@ classdef Circle
             if length(centrePoint) == 3
                 obj.z = centrePoint(3);
             end
-
+ 
             % Angle range of a spiral with defined step
             ang = 0:0.01:2*pi;
             
@@ -88,7 +88,7 @@ classdef Circle
             a = obj.radius*cos(ang);
             b = obj.radius*sin(ang);
             c = zeros(1, length(b));
-
+ 
             % Decides whether to return 3d or 2d vector to the structure
             if length(centrePoint) == 2
                 obj.circle.coordinates = {obj.x+a obj.y+b};
