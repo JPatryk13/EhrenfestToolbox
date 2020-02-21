@@ -1,6 +1,9 @@
-% PLOT - ...
+% PLOT - Class making an extensive use of other toolbox classes and plot,
+% plot3, surf and tiledLayout Matlab functionalities. It generates 
+% defined-size layout containing tiles which may display 2D or 3D plots or 
+% surfaces with Matlab styling properties. 
 %
-%   obj = Plot, constructor
+%   obj = Plot, constructor.
 %           Output:
 %       'obj': object of the class.
 %
@@ -57,23 +60,29 @@
 %           Output:
 %       'obj': object of the class.
 %
-%   drawLayout(obj), ...
+%   drawLayout(obj), loops through each tile, uses drawTile function.
 %           Input:
 %       'obj': object of the class.
 %
-%   drawPlot(~, object, dimensions), (private method) ...
-%           Input:
-%       'object': ...
-%       'dimensions': ...
-%
-%   drawSurf(~, object), (private method) ...
-%           Input:
-%       'object': ...
-%
-%   drawTile(obj, tile), (private method) ...
+%   drawTile(obj, tile), (private method) loops through plots/surfaces
+%       assigned to the tile, uses drawPlot and drawSurf functions.
 %           Input:
 %       'obj': object of the class.
-%       'tile': ...
+%       'tile': tile structure.
+%
+%   drawPlot(~, object, dimensions), (private method) uses plot() and
+%       plot3() Matlab functions and adds style properties to the graph.
+%           Input:
+%       'object': plot structure containing coordinates array and style
+%       properties.
+%       'dimensions': numerical value (2 or 3), dictates dimensions of the
+%       plot.
+%
+%   drawSurf(~, object), (private method) uses surf() Matlab function and 
+%       adds style properties to the graph.
+%           Input:
+%       'object': surface structure containing mesh array and style
+%       properties.
 %
 %   Limitations:
 %       The class can only be fed with certain type of structure -
@@ -82,28 +91,58 @@
 %       class cannot generate animations (gifs).
 %
 %   Examples:
-%       ...
+%       Example utilising classes CIRCLE, PARABOLOID and SPIRAL. Creates
+%       two circles, a spiral and a paraboloid. Defines the layout and
+%       assignes above to it. Then, draws the tiled layout.
+% 
+%            circleHandle1 = Circle(5, [0 0], 'z');
+%            circle1 = getCircle(circleHandle1);
+%
+%            circleHandle2 = Circle(3, [1 1 1], 'z');
+%            circle2 = getCircle(circleHandle2);
+%
+%            spiralHandle = Spiral(1, 5, [0 0], 'z', 2);
+%            spiral = getSpiral(spiralHandle);
+%
+%            paraboloidHandle = Paraboloid([0 0 0], [2 2], '+', 2);
+%            paraboloid = getParaboloid(paraboloidHandle);
+%
+%            layout = Plot;
+%            layout = createLayout(layout, 1, 2);
+%
+%            layout = defineTile(layout, "Circle + Spiral", 
+%                                {'x', 'y'}, circle1.size);
+%            layout = defineTile(layout, "Circle + Paraboloid", 
+%                                {'x', 'y', 'z'}, circle2.size);
+%
+%            layout = addPlot(layout, 1, circle1.coordinates, '--', 'r', 
+%                             0.5, "Circle");
+%            layout = addPlot(layout, 2, circle2.coordinates, '-', 'r', 
+%                             0.5, "Circle");
+%            layout = addPlot(layout, 1, spiral.coordinates, '-', 'b', 
+%                             0.5, "Spiral");
+%            layout = addSurf(layout, 2, paraboloid.coordinates, 'k',
+%                             '-', 'none', 0, "Paraboloid");
+%
+%            drawLayout(layout);
+%
 %
 %   Use:
 %       It is recommended to use other classes of the EhrenfestToolbox to 
 %       generate data, though, it can be fed with any arrays of appropriate
 %       dimensionality - e.g. if the array with coordinates is
 %       two-dimensional then the array with axes size must have 4 entries.
+%           Call in the order:
+%       1. createLayout
+%       2. defineTile (as many times as needed)
+%       3. addPlot, addSurf (as many times as needed)
+%       4. drawLayout 
 %
 %   See also:
 %       PARABOLOID, SPIRAL, CIRCLE, WAVEFUNCTION, QUANTUMN,
 %       ENERGYAPPROXIMATION
 %
 %   Patryk Jesionka, 2019
-
-%      INSTRUCTION
-% Call in the order:
-% 1. createLayout
-% 2. defineTile (as many times as you need)
-% 3. addPlot, addSurf (as many times as you need)
-% 4. drawLayout 
-% 
-%
 
 classdef Plot
     properties
@@ -130,8 +169,8 @@ classdef Plot
         lineWidth {mustBePositive} = 0.5
         
         % Surface properties - used to validate user input
-        edgeColor {mustBeMember(edgeColor, {'none', 'flat'})} = 'none'
-        faceColor = 'interp'
+        edgeColor {mustBeMember(edgeColor, {'none', 'flat', 'interp', 'r', 'g', 'b', 'c', 'm', 'y', 'k', 'w'})} = 'none'
+        faceColor {mustBeMember(faceColor, {'none', 'flat', 'interp', 'r', 'g', 'b', 'c', 'm', 'y', 'k', 'w'})} = 'none'
         faceAlpha {mustBeGreaterThanOrEqual(faceAlpha, 0), mustBeLessThanOrEqual(faceAlpha, 1)} = 1
     end
     methods (Access = private)
@@ -328,34 +367,5 @@ classdef Plot
                 grid on
             end
         end
-        
-%         function gifLayout()
-%             n_laps = 0:0.05:4.95;
-%             nImages = length(n_laps);
-% 
-%             n_rmin = 4.95:-0.05:0;
-% 
-%             fig = figure;
-%             for idx = 1:nImages
-%                 % hold on
-%                 % createParaboloid(4, 1)
-%                 createCircle(0, 0, 0, 5, n_rmin(idx), n_laps(idx), [1 0], 5, true, true, true)
-%                 % hold off
-%                 drawnow
-%                 frame = getframe(fig);
-%                 im{idx} = frame2im(frame);
-%             end
-% 
-%             filename = 'm3d_01.gif'; % Specify the output file name
-%             for idx = 1:nImages
-%                 [A,map] = rgb2ind(im{idx},256);
-%                 if idx == 1
-%                     imwrite(A,map,filename,'gif','LoopCount',Inf,'DelayTime',0.05);
-%                 else
-%                     imwrite(A,map,filename,'gif','WriteMode','append','DelayTime',0.05);
-%                 end
-%             end
-%             close;
-%         end
     end
 end
