@@ -47,7 +47,7 @@
 %           spiralHandle = Spiral(3, 5, [0 0], 'z', 1);
 %           spiral = getSpiral(spiralHandle);
 %           plot(spiral.coordinates{1}, spiral.coordinates{2});
-%           axis(spiral.size);
+%           axis(spiral.size)
 %       Create a spiral in 3D (fixed x coordinate) with radius ranging from
 %       6.28 to 12.56 centred at [0, 3.14, 3.14] - it is plotted on the y-z 
 %       surface at x = 0 - and 4 laps.
@@ -55,7 +55,7 @@
 %           spiral = getSpiral(spiralHandle);
 %           plot3(spiral.coordinates{1}, spiral.coordinates{2}, 
 %                 spiral.coordinates{3});
-%           axis(spiral.size);
+%           axis(spiral.size)
 %
 %   Use:
 %       Such a structure ('spiral') can be fed into standard MATLAB

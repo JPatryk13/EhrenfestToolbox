@@ -35,7 +35,7 @@
 %           circleHandle = Circle(5, [0 0], 'z');
 %           circle = getCircle(circleHandle);
 %           plot(circle.coordinates{1}, circle.coordinates{2});
-%           axis(circle.size);
+%           axis(circle.size)
 %       Create a circle in 3D (fixed x coordinate) with radius 3.14,
 %       centred at [0, 3.14, 3.14] - it is plotted on the y-z surface at
 %       x = 0.
@@ -43,7 +43,7 @@
 %           circle = getCircle(circleHandle);
 %           plot3(circle.coordinates{1}, circle.coordinates{2}, 
 %                circle.coordinates{3});
-%           axis(circle.size);
+%           axis(circle.size)
 %
 %   Use:
 %       Such a structure ('circle') can be fed into standard MATLAB
