@@ -31,19 +31,19 @@
 %       circle is plotted on) must be parallel to one of the axes.
 %
 %   Examples:
-%       Create a circle in 2D (x-y plane) with radius 5, centred at [0, 0]
-%           circleHandle = Circle(5, [0 0], 'z')
-%           circle = getCircle(circleHandle)
-%           plot(circle.coordinates{1}, circle.coordinates{2})
-%           axis(circle.size)
+%       Create a circle in 2D (x-y plane) with radius 5, centred at [0, 0].
+%           circleHandle = Circle(5, [0 0], 'z');
+%           circle = getCircle(circleHandle);
+%           plot(circle.coordinates{1}, circle.coordinates{2});
+%           axis(circle.size);
 %       Create a circle in 3D (fixed x coordinate) with radius 3.14,
 %       centred at [0, 3.14, 3.14] - it is plotted on the y-z surface at
 %       x = 0.
-%           circleHandle = Circle(3.14, [0 3.14 3.14], 'x')
-%           circle = getCircle(circleHandle)
-%           plot(circle.coordinates{1}, circle.coordinates{2}, 
-%                circle.coordinates{3})
-%           axis(circle.size)
+%           circleHandle = Circle(3.14, [0 3.14 3.14], 'x');
+%           circle = getCircle(circleHandle);
+%           plot3(circle.coordinates{1}, circle.coordinates{2}, 
+%                circle.coordinates{3});
+%           axis(circle.size);
 %
 %   Use:
 %       Such a structure ('circle') can be fed into standard MATLAB
