@@ -8,7 +8,8 @@ format compact
 % paraboloidEx2
 % wavefunctionEx
 % plotEx
-% quantumNEx
+% quantumNEx1
+% quantumNEx2
 
 %% CIRCLE (ex. 1)
 function circleEx1
@@ -222,8 +223,8 @@ function plotEx
     drawLayout(layout);
 end
 
-%% QUANTUMN (ex.)
-function quantumNEx
+%% QUANTUMN (ex. 1)
+function quantumNEx1
     radius = 0.000003;
     linearSpeed = 15000;
 
@@ -231,4 +232,61 @@ function quantumNEx
 	list = getTheList(quantumN);
     
     disp(list);
+end
+
+%% QUANTUMN (ex. 2)
+function quantumNEx2
+    % Determine the list of allowed quantum numbers
+    linearSpeed = 15000;
+    radius = 0.000003;
+
+    quantumN = QuantumN(linearSpeed, radius);
+    list = getTheList(quantumN);
+
+    % Generating wavefunction for each quantum number
+    time = 0;
+    arythmeticType = 'sin';
+    wavefunction = [];
+
+    for i = size(list)
+        wavefunctionHandle = Wavefunction(radius, list(1));
+        wavefunction = [wavefunction, getWavefunc(wavefunctionHandle, time, arythmeticType).coordinates];
+    end
+
+    % Superimposing wavefunction in each x, y, z direction
+    sumx = zeros(1, 201);
+    sumy = zeros(1, 201);
+    sumz = zeros(1, 201);
+    for i = 1:3:size(list)
+        sumx = sumx + wavefunction{i};
+        sumy = sumy + wavefunction{i+1};
+        sumz = sumz + wavefunction{i+2};
+    end
+
+    % Define m-by-n layout (two tiles)
+    m = 1;
+    n = 2;
+
+    layout = Plot;
+    layout = createLayout(layout, m, n);
+
+    % Define tiles
+    title1 = "Superimposed wavefunction";
+    axesNames1 = {'x', 'y', 'Imaginary axis'};
+    size1 = [0 0 0 0 0 0]; % forces: axis auto
+    title2 = "Decomposed wavefunction";
+    axesNames2 = {' ', 'Spatial coordinate'};
+    size2 = [0 201 -400 400];
+
+    layout = defineTile(layout, title1, axesNames1, size1);
+    layout = defineTile(layout, title2, axesNames2, size2);
+
+    % Add plots to tiles
+    layout = addPlot(layout, 1, {sumx sumy sumz}, '-', 'k', 0.5, "Wavefunction");
+    layout = addPlot(layout, 2, {1:201 sumx}, '-', 'c', 0.5, "X-component");
+    layout = addPlot(layout, 2, {1:201 sumy}, '-', 'm', 0.5, "Y-component");
+    layout = addPlot(layout, 2, {1:201 sumz}, '-', 'g', 0.5, "Imaginary component");
+
+    % Draw the layout
+    drawLayout(layout);
 end
