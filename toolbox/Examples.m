@@ -8,6 +8,7 @@ format compact
 % paraboloidEx2
 % wavefunctionEx
 % plotEx
+% quantumNEx
 
 %% CIRCLE (ex. 1)
 function circleEx1
@@ -219,4 +220,15 @@ function plotEx
     
     % Draw the layout
     drawLayout(layout);
+end
+
+%% QUANTUMN (ex.)
+function quantumNEx
+    radius = 0.000003;
+    linearSpeed = 15000;
+
+    quantumN = QuantumN(radius, linearSpeed);
+	list = getTheList(quantumN);
+    
+    disp(list);
 end
