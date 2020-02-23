@@ -240,7 +240,7 @@ classdef Plot
         function obj = defineTile(obj, title, axesNames, size)
             % title = "title"
             % axesNames = {'x' 'y' 'z'}
-            % sizes = [-x x -y y -z z]
+            % size = [-x x -y y -z z] |
             
             % Input validation
             if ~isstring(title)
@@ -250,7 +250,7 @@ classdef Plot
             elseif ~(2 >= length(axesNames) <= 3)
                 error("axesNames array must have either 2 or 3 dimensions!");
             elseif ~(length(size) == 4 || length(size) == 6)
-                error("size array must have either 4 or 6 dimensions!");
+                error("size array must have either 4 or 6 dimensions or seto to 'auto'!");
             end
             % Check if array content has a valid type
             for i = 1:length(axesNames)
@@ -259,7 +259,7 @@ classdef Plot
                 end
             end
             for i = 1:length(size)
-                if ~isnumeric(size(i))
+                if ~(isnumeric(size(i)))
                     error("Size must be an array with integers!")
                 end
             end
@@ -360,9 +360,13 @@ classdef Plot
                 title(obj.tiles{i}.title)
                 xlabel(obj.tiles{i}.axesNames{1})
                 ylabel(obj.tiles{i}.axesNames{2})
-                axis(obj.tiles{i}.size)
-                if length([]) == 3
-                    zlabel([obj.tiles{i}.axesNames{3}])
+                if obj.tiles{i}.size == 0
+                    axis auto
+                else
+                    axis(obj.tiles{i}.size)
+                end
+                if length(obj.tiles{i}.axesNames) == 3
+                    zlabel(obj.tiles{i}.axesNames{3})
                 end
                 grid on
             end
