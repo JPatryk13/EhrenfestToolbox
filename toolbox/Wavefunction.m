@@ -12,15 +12,17 @@
 %           Output:
 %       'obj': object of the class.
 %
-%   wavefuncion = getWavefunc(obj, time, arithmeticType), validates input,
-%       generates wavefunction of the type specified and returns the
-%       structure.
+%   wavefuncion = getWavefunc(obj, time, arithmeticType, amplitudeAxes), 
+%       validates input, generates wavefunction of the type specified and 
+%       returns the structure.
 %           Input:
 %       'obj': object of the class.
 %       'time': nonnegative value, wavefunction is time dependent therefore
 %       the output coordinates vary with time parameter.
 %       'arithmeticType': 'sin' or 'cos' string, specifies which of the
 %       component of the wavefunction must be returned with the structure.
+%       'amplitudeAxes': which type of the data should be returned (look:
+%       Updates)
 %           Output:
 %       'wavefunction': structure containing 'coordinates' and 'size'
 %       arrays.
@@ -40,13 +42,23 @@
 %                 wavefunction.coordinates{3});
 %           axis(wavefunction.size)
 %
+%   Updates:
+%       27/02/2020: Added new input parameter in getWavefunc(),
+%           amplitudeAxes - can take either 'xy' or 'z' value. It decides
+%           on the type of the returned data. In case of 'xy' the
+%           flower-shaped wavefunction coordinates are returned, otherwise
+%           x and y coordinate arrays are ampty but the z coordinate;
+%           it contains information on wave domain. It allows to plot
+%           wavefunction with aplitude in the z-axis.
+%
 %   Use:
 %       Such a structure ('wavefunction') can be fed into standard MATLAB
 %       functions (e.g. plot(), plot3()). However, its purpose is to input
 %       data into the PlotToolbox's PLOT.
 %
 %   See also:
-%       PARABOLOID, SPIRAL, CIRCLE, PLOT, QUANTUMN, ENERGYAPPROXIMATION
+%       PARABOLOID, SPIRAL, CIRCLE, PLOT, QUANTUMN, ENERGYAPPROXIMATION,
+%       WAVE
 %
 %   Patryk Jesionka, 2019
 
@@ -89,25 +101,47 @@ classdef Wavefunction
             obj.waveDomain = 0:(obj.q*obj.quantumN*2*pi):(obj.quantumN*2*pi);
         end
         
-        function wavefuncion = getWavefunc(obj, time, arithmeticType)
+        function wavefuncion = getWavefunc(obj, time, arithmeticType, amplitudeAxes)
             % Input validation
             if time < 0
                 error("Time must be a positive value!");
-            elseif ~ismember(arithmeticType, {'sin', 'cos'})
+            end
+            if ~ismember(arithmeticType, {'sin', 'cos'})
                 error("arithmeticType must be either 'sin' or 'cos'!");
             end
+            if ~ismember(amplitudeAxes, {'xy', 'z'})
+                error("amplitudeAxes must be either 'xy' or 'z'!");
+            end
             
-            % Generating coordinates
-            if arithmeticType == 'sin'
-                xSin = obj.radius*cos(obj.circleDomain) + obj.amp.*sin(obj.waveDomain).*cos(obj.circleDomain).*cos(obj.freq.*time);
-                ySin = obj.radius*sin(obj.circleDomain) + obj.amp.*sin(obj.waveDomain).*sin(obj.circleDomain).*cos(obj.freq.*time);
-                zSin = transpose(-obj.amp.*sin(obj.freq.*time).*ones(length(xSin), 1));
-                obj.wavefunc.coordinates = {xSin ySin zSin};
+            
+            % Generating coordinates. Return coordinates of the
+            % flower-shaped wavefunction if the 'amplitudeAxes' is
+            % specified as 'xy'; otherwise return empty arrays at x and y
+            % coordinates and wavefunction with amplitude in z direction.
+            if amplitudeAxes == 'xy'
+                if arithmeticType == 'sin'
+                    xSin = obj.radius*cos(obj.circleDomain) + obj.amp.*sin(obj.waveDomain).*cos(obj.circleDomain).*cos(obj.freq.*time);
+                    ySin = obj.radius*sin(obj.circleDomain) + obj.amp.*sin(obj.waveDomain).*sin(obj.circleDomain).*cos(obj.freq.*time);
+                    zSin = transpose(-obj.amp.*sin(obj.freq.*time).*ones(length(xSin), 1));
+                    obj.wavefunc.coordinates = {xSin ySin zSin};
+                else
+                    xCos = obj.radius*cos(obj.circleDomain) + obj.amp.*cos(obj.waveDomain).*cos(obj.circleDomain).*cos(obj.freq.*time);
+                    yCos = obj.radius*sin(obj.circleDomain) + obj.amp.*cos(obj.waveDomain).*sin(obj.circleDomain).*cos(obj.freq.*time);
+                    zCos = transpose(-obj.amp.*sin(obj.freq.*time).*ones(length(xCos), 1));
+                    obj.wavefunc.coordinates = {xCos yCos zCos};
+                end
             else
-                xCos = obj.radius*cos(obj.circleDomain) + obj.amp.*cos(obj.waveDomain).*cos(obj.circleDomain).*cos(obj.freq.*time);
-                yCos = obj.radius*sin(obj.circleDomain) + obj.amp.*cos(obj.waveDomain).*sin(obj.circleDomain).*cos(obj.freq.*time);
-                zCos = transpose(-obj.amp.*sin(obj.freq.*time).*ones(length(xCos), 1));
-                obj.wavefunc.coordinates = {xCos yCos zCos};
+                if arithmeticType == 'sin'
+                    xSin = [];
+                    ySin = [];
+                    zSin = obj.amp.*sin(obj.waveDomain).*cos(obj.freq.*time);
+                    obj.wavefunc.coordinates = {xSin ySin zSin};
+                else
+                    xCos = [];
+                    yCos = [];
+                    zCos = obj.amp.*cos(obj.waveDomain).*cos(obj.freq.*time);
+                    obj.wavefunc.coordinates = {xCos yCos zCos};
+                end
             end
             
             % Defining the size of the plot
