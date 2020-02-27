@@ -52,7 +52,7 @@
 %
 %   See also:
 %       PARABOLOID, SPIRAL, WAVEFUNCTION, PLOT, QUANTUMN,
-%       ENERGYAPPROXIMATION
+%       ENERGYAPPROXIMATION, WAVE
 %
 %   Patryk Jesionka, 2019
  
@@ -88,11 +88,12 @@ classdef Circle
             end
  
             % Angle range of a spiral with defined step
-            ang = 0:0.01:2*pi;
+            ang = 0:(pi/100):2*pi;
             
             % Generate pair of arrays of coordinates
             a = obj.radius*cos(ang);
             b = obj.radius*sin(ang);
+            % The third array is fixed
             c = zeros(1, length(b));
  
             % Decides whether to return 3d or 2d vector to the structure

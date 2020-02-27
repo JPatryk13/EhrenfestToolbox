@@ -64,7 +64,7 @@
 %
 %   See also:
 %       PARABOLOID, CIRCLE, WAVEFUNCTION, PLOT, QUANTUMN,
-%       ENERGYAPPROXIMATION
+%       ENERGYAPPROXIMATION, WAVE
 %
 %   Patryk Jesionka, 2019
 

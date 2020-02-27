@@ -49,7 +49,8 @@
 %       data into the PlotToolbox's PLOT.
 %
 %   See also:
-%       CIRCLE, SPIRAL, WAVEFUNCTION, PLOT, QUANTUMN, ENERGYAPPROXIMATION
+%       CIRCLE, SPIRAL, WAVEFUNCTION, PLOT, QUANTUMN, ENERGYAPPROXIMATION,
+%       WAVE
 %
 %   Patryk Jesionka, 2019
 

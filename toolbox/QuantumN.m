@@ -38,7 +38,7 @@
 %
 %   See also:
 %       PARABOLOID, SPIRAL, WAVEFUNCTION, PLOT, CIRCLE,
-%       ENERGYAPPROXIMATION
+%       ENERGYAPPROXIMATION, WAVE
 %
 %   Patryk Jesionka, Maciej Makuch, 2019
 
