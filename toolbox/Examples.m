@@ -10,6 +10,7 @@ format compact
 % plotEx
 % quantumNEx1
 % quantumNEx2
+% waveEx
 
 %% CIRCLE (ex. 1)
 function circleEx1
@@ -147,9 +148,11 @@ function wavefunctionEx
     quantumN = 6;
     time = 0;
     arithmeticType = 'sin';
+    amplitudeAxes = 'xy';
+    
     
     wavefunctionHandle = Wavefunction(radius, quantumN);
-	wavefunction = getWavefunc(wavefunctionHandle, time, arithmeticType);
+	wavefunction = getWavefunc(wavefunctionHandle, time, arithmeticType, amplitudeAxes);
     
 	plot3(wavefunction.coordinates{1}, wavefunction.coordinates{2}, wavefunction.coordinates{3});
 	axis(wavefunction.size)
@@ -289,4 +292,29 @@ function quantumNEx2
 
     % Draw the layout
     drawLayout(layout);
+end
+
+%% WAVE (ex.)
+function waveEx
+    radius = 0.1;
+    quantumN = 8;
+    time = 0;
+    arithmeticType = 'cos';
+    
+    % Create a circle - wave horizontal axis
+    circleHandle = Circle(radius, [0 0 0], 'z');
+    circle = getCircle(circleHandle);
+
+    % Create a wave
+    waveHandle = Wave(radius, quantumN);
+    wave = getWave(waveHandle, time, arithmeticType);
+    
+    plot3(wave.coordinates{1}, wave.coordinates{2}, wave.coordinates{3}, circle.coordinates{1}, circle.coordinates{2}, circle.coordinates{3}, '--');
+    axis(wave.size)
+    
+    view(3)
+    xlabel('x')
+    ylabel('y')
+    zlabel('z')
+    grid on
 end
