@@ -250,10 +250,11 @@ function quantumNEx2
     time = 0;
     arythmeticType = 'sin';
     wavefunction = [];
+    amplitudeAxes = 'xy';
 
     for i = size(list)
         wavefunctionHandle = Wavefunction(radius, list(1));
-        wavefunction = [wavefunction, getWavefunc(wavefunctionHandle, time, arythmeticType).coordinates];
+        wavefunction = [wavefunction, getWavefunc(wavefunctionHandle, time, arythmeticType, amplitudeAxes).coordinates];
     end
 
     % Superimposing wavefunction in each x, y, z direction
@@ -278,7 +279,7 @@ function quantumNEx2
     axesNames1 = {'x', 'y', 'Imaginary axis'};
     size1 = [0 0 0 0 0 0]; % forces: axis auto
     title2 = "Decomposed wavefunction";
-    axesNames2 = {' ', 'Spatial coordinate'};
+    axesNames2 = {'Angle (200 = 2\pi)', 'Spatial coordinate'};
     size2 = [0 201 -400 400];
 
     layout = defineTile(layout, title1, axesNames1, size1);
@@ -297,24 +298,28 @@ end
 %% WAVE (ex.)
 function waveEx
     radius = 0.1;
+    centrePoint = [0 0 0];
+    fixedCoordinate = 'z';
     quantumN = 8;
     time = 0;
     arithmeticType = 'cos';
     
     % Create a circle - wave horizontal axis
-    circleHandle = Circle(radius, [0 0 0], 'z');
+    circleHandle = Circle(radius, centrePoint, fixedCoordinate);
     circle = getCircle(circleHandle);
 
     % Create a wave
     waveHandle = Wave(radius, quantumN);
     wave = getWave(waveHandle, time, arithmeticType);
     
-    plot3(wave.coordinates{1}, wave.coordinates{2}, wave.coordinates{3}, circle.coordinates{1}, circle.coordinates{2}, circle.coordinates{3}, '--');
+    plot3(wave.coordinates{1}, wave.coordinates{2}, wave.coordinates{3}, 'k', circle.coordinates{1}, circle.coordinates{2}, circle.coordinates{3}, '--');
     axis(wave.size)
     
     view(3)
+    title("Superimposed wavefunction")
+    legend("Wavefunction", "Trajectory")
     xlabel('x')
     ylabel('y')
-    zlabel('z')
+    zlabel('Amplitude')
     grid on
 end

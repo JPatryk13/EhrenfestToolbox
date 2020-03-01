@@ -191,6 +191,7 @@ classdef Plot
             p.Color = object.lineColor;
             p.LineWidth = object.lineWidth;
             p.DisplayName = object.name;
+            
         end
         
         function drawSurf(~, object)
