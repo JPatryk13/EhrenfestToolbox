@@ -142,7 +142,7 @@
 %       PARABOLOID, SPIRAL, CIRCLE, WAVEFUNCTION, QUANTUMN,
 %       ENERGYAPPROXIMATION, WAVE
 %
-%   Patryk Jesionka, 2020
+%   Patryk Jesionka, 2019
 
 classdef Plot
     properties
