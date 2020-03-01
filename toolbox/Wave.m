@@ -1,7 +1,7 @@
 % WAVE - generating data required to plot a graph of the wavefunction with
 % amplitude in z direction.
 %
-%   obj = Wave(radius, quantumN), constructor, validates input using CIRCLE
+%   obj = Wave(radius, quantumN, q), constructor, validates input using CIRCLE
 %       and WAVEFUCNTION classes, generates circle coordinates (x and y of
 %       use) and initialises wavefunction object.
 %           Input:
@@ -9,6 +9,7 @@
 %       will be plotted on.
 %       'quantumN': nonnegative, even integer value, quantum number for
 %       frequency, period and wavedomain of the function.
+%       'q': must be positive integer, quality factor (see Updates).
 %           Output:
 %       'obj': object of the class.
 %
@@ -58,13 +59,13 @@ classdef Wave
         wave = struct('coordinates', [], 'size', [])
     end
     methods
-        function obj = Wave(radius, quantumN)
+        function obj = Wave(radius, quantumN, q)
             % Usse CIRCLE and WAFUNCTION class objects to verify input and
             % create circle as a base for the wavefunction and to
             % initialise wavefunction object
-            circleHandle = Circle(radius, [0 0 0], 'z');
+            circleHandle = Circle(radius, [0 0 0], 'z', q);
             obj.circle = getCircle(circleHandle);
-            obj.wavefunctionHandle = Wavefunction(radius, quantumN);
+            obj.wavefunctionHandle = Wavefunction(radius, quantumN, q);
             
             % Set x and y axis limits of the plot
             obj.wave.size(1:4) = [-radius radius -radius radius].*1.5;

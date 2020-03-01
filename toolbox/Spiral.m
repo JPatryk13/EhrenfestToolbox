@@ -1,7 +1,7 @@
 % SPIRAL - generating data required to plot a spiral-shaped trajectory
 % in two- or three-dimensional space.
 %
-%   obj = Spiral(rMin, rMax, centrePoint, fixedCoordinate, noOfLaps), 
+%   obj = Spiral(rMin, rMax, centrePoint, fixedCoordinate, noOfLaps, q), 
 %       constructor, validates user input, generates arrays of 
 %       coordinates*, based on the 'fixedCoordinate' decides on the 
 %       orientation of the spiral in 3D space and assigns data (with 
@@ -19,6 +19,7 @@
 %       plotted in 3D though as a plot has two dimensions - the letter here
 %       states the axis in along which the spiral should be flat. It is
 %       related to the limitation of the class.
+%       'q': must be positive integer, quality factor (see Updates).
 %           Output:
 %       'obj': object of the class
 %
@@ -57,6 +58,11 @@
 %                 spiral.coordinates{3});
 %           axis(spiral.size)
 %
+%   Updates:
+%       01/03/2020: Added quality factor (constructor). Need for unifying
+%           CIRCLE, WAVEFUNCTION and  SPIRAL classes' output number of
+%           steps replaced with freedom of choice.
+%
 %   Use:
 %       Such a structure ('spiral') can be fed into standard MATLAB
 %       functions (e.g. plot(), plot3()). However, its purpose is to input
@@ -73,19 +79,23 @@ classdef Spiral
         % rMax (later r), rMin: 'starting' and 'ending' radii of the spiral
         rMin {mustBePositive}
         rMax {mustBePositive}
+        
         % Constant coordinate - determines orientation of the spiral
         fixedCoordinate {mustBeMember(fixedCoordinate, {'x', 'y', 'z'})} = 'z'
-        % laps: number of full rotations
+        % Laps: number of full rotations
         noOfLaps {mustBeNonnegative}
+        
         % x, y, z: coordinates of the spiral's centre
         x {mustBeNumeric} = 0
         y {mustBeNumeric} = 0
         z {mustBeNumeric} = 0
+       
+        q {mustBePositive, mustBeInteger} = 360 % Quality factor
+        ang % Angle range of a spiral with defined step
+        
         % Structure to be returned with coordinates and dimensions of the
         % plot
         spiral = struct('coordinates', [], 'size', [])
-        % angle range of a spiral with defined step
-        ang
     end
     methods (Access = private)
         function [a, b] = generateSpiral(obj)
@@ -103,7 +113,7 @@ classdef Spiral
         end
     end
     methods (Access = public)
-        function obj = Spiral(rMin, rMax, centrePoint, fixedCoordinate, noOfLaps)
+        function obj = Spiral(rMin, rMax, centrePoint, fixedCoordinate, noOfLaps, q)
             % Input validation
             obj.rMin = rMin;
             obj.rMax = rMax;
@@ -120,9 +130,10 @@ classdef Spiral
             if length(centrePoint) == 3
                 obj.z = centrePoint(3);
             end
+            obj.q = q;
             
             % Generating an angle range with step 2*pi/90
-            obj.ang = 0:(2*pi/90):obj.noOfLaps*2*pi;
+            obj.ang = 0:(obj.noOfLaps*2*pi/obj.q):obj.noOfLaps*2*pi;
             
             % Generating coordinate arrays
             [a, b] = obj.generateSpiral;

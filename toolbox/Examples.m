@@ -10,7 +10,7 @@ format compact
 % plotEx
 % quantumNEx1
 % quantumNEx2
-% waveEx
+waveEx
 
 %% CIRCLE (ex. 1)
 function circleEx1
@@ -19,8 +19,9 @@ function circleEx1
     radius = 5;
     centrePoint = [0 0];
     fixedCoordinate = 'z';
+    q = 360;
     
-    circleHandle = Circle(radius, centrePoint, fixedCoordinate);
+    circleHandle = Circle(radius, centrePoint, fixedCoordinate, q);
     circle = getCircle(circleHandle);
     
     plot(circle.coordinates{1}, circle.coordinates{2});
@@ -40,8 +41,9 @@ function circleEx2
     radius = 3.14;
     centrePoint = [0 3.14 3.14];
     fixedCoordinate = 'x';
+    q = 360;
     
-    circleHandle = Circle(radius, centrePoint, fixedCoordinate);
+    circleHandle = Circle(radius, centrePoint, fixedCoordinate, q);
     circle = getCircle(circleHandle);
     
     plot3(circle.coordinates{1}, circle.coordinates{2}, circle.coordinates{3});
@@ -64,8 +66,9 @@ function spiralEx1
     centrePoint = [0 0];
     fixedCoordinate = 'z';
     noOfLaps = 1;
+    q = 360;
     
-    spiralHandle = Spiral(rMin, rMax, centrePoint, fixedCoordinate, noOfLaps);
+    spiralHandle = Spiral(rMin, rMax, centrePoint, fixedCoordinate, noOfLaps, q);
 	spiral = getSpiral(spiralHandle);
     
 	plot(spiral.coordinates{1}, spiral.coordinates{2});
@@ -88,8 +91,9 @@ function spiralEx2
     centrePoint = [0 3.14 3.14];
     fixedCoordinate = 'x';
     noOfLaps = 4;
+    q = 360;
     
-    spiralHandle = Spiral(rMin, rMax, centrePoint, fixedCoordinate, noOfLaps);
+    spiralHandle = Spiral(rMin, rMax, centrePoint, fixedCoordinate, noOfLaps, q);
 	spiral = getSpiral(spiralHandle);
     
 	plot3(spiral.coordinates{1}, spiral.coordinates{2}, spiral.coordinates{3});
@@ -149,9 +153,10 @@ function wavefunctionEx
     time = 0;
     arithmeticType = 'sin';
     amplitudeAxes = 'xy';
+    q = 360;
     
     
-    wavefunctionHandle = Wavefunction(radius, quantumN);
+    wavefunctionHandle = Wavefunction(radius, quantumN, q);
 	wavefunction = getWavefunc(wavefunctionHandle, time, arithmeticType, amplitudeAxes);
     
 	plot3(wavefunction.coordinates{1}, wavefunction.coordinates{2}, wavefunction.coordinates{3});
@@ -303,13 +308,14 @@ function waveEx
     quantumN = 8;
     time = 0;
     arithmeticType = 'cos';
+    q = 360;
     
     % Create a circle - wave horizontal axis
-    circleHandle = Circle(radius, centrePoint, fixedCoordinate);
+    circleHandle = Circle(radius, centrePoint, fixedCoordinate, q);
     circle = getCircle(circleHandle);
 
     % Create a wave
-    waveHandle = Wave(radius, quantumN);
+    waveHandle = Wave(radius, quantumN, q);
     wave = getWave(waveHandle, time, arithmeticType);
     
     plot3(wave.coordinates{1}, wave.coordinates{2}, wave.coordinates{3}, 'k', circle.coordinates{1}, circle.coordinates{2}, circle.coordinates{3}, '--');

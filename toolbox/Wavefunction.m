@@ -2,13 +2,14 @@
 % the wavefunction. It draws the amplitude in the same plane as the
 % circular trajectory of a particle.
 %
-%   obj = Wavefunction(radius, quantumN), constructor,
+%   obj = Wavefunction(radius, quantumN, q), constructor,
 %       validates user input, defines base properties of the wavefunction
 %       and its domains.
 %           Input:
 %       'radius': nonnegative number, radius of a circle to create
 %       'quantumN': nonnegative, even integer value, quantum number for
 %       frequency, period and wavedomain of the function.
+%       'q': must be positive integer, quality factor (see Updates).
 %           Output:
 %       'obj': object of the class.
 %
@@ -50,6 +51,9 @@
 %           x and y coordinate arrays are ampty but the z coordinate;
 %           it contains information on wave domain. It allows to plot
 %           wavefunction with aplitude in the z-axis.
+%       01/03/2020: Added quality factor (constructor). Need for unifying
+%           CIRCLE, WAVEFUNCTION and  SPIRAL classes' output number of
+%           steps replaced with freedom of choice.
 %
 %   Use:
 %       Such a structure ('wavefunction') can be fed into standard MATLAB
@@ -64,25 +68,31 @@
 
 classdef Wavefunction
     properties
-        radius {mustBePositive} % radius of the electron's path
-        quantumN {mustBeInteger} % quantum number n
-        hbar = 1.05*10.^(-34); % modified Planck's constant
-        me = 9.1094*10.^(-31); % electron rest mass
-        rat % ratio of Planck's constant and electron rest mass
-        freq % frequency of the wave
-        q = 0.005; % quality factor, the lower it is the more steps plotter takes (time vs quality)
-        circleDomain % range from 0 to 2*pi (generating a circle)
-        waveDomain % range from 0 to 2*n*pi (generating a weve)
-        amp % amplitude of the wave (normalisation constant)
-        period % time of the one escillation
+        radius {mustBePositive} % Radius of the electron's path
+        quantumN {mustBeInteger} % Quantum number n
+        
+        hbar = 1.05*10.^(-34); % Modified Planck's constant
+        me = 9.1094*10.^(-31); % Electron rest mass
+        rat % Ratio of Planck's constant and electron rest mass
+        
+        freq % Frequency of the wave
+        amp % Amplitude of the wave (normalisation constant)
+        period % Time of the one escillation
+        
+        q {mustBePositive, mustBeInteger} = 360 % Quality factor
+        
+        circleDomain % Range from 0 to 2*pi (generating a circle)
+        waveDomain % Range from 0 to 2*n*pi (generating a weve)
+        
         % Structure to be returned with coordinates and dimensions of the plot
         wavefunc = struct('coordinates', [], 'size', [])
     end
     methods
-        function obj = Wavefunction(radius, quantumN)
+        function obj = Wavefunction(radius, quantumN, q)
             % Input validation
             obj.radius = radius;
             obj.quantumN = quantumN;
+            obj.q = q;
             % verification whether quantumN is even or not
             if ~(mod(obj.quantumN, 2) == 0)
                 error("Quantum number n must be even!");
@@ -97,8 +107,8 @@ classdef Wavefunction
             obj.amp = (pi*obj.radius)^(-0.5);
             
             % defining domains
-            obj.circleDomain = 0:(obj.q*2*pi):(2*pi);
-            obj.waveDomain = 0:(obj.q*obj.quantumN*2*pi):(obj.quantumN*2*pi);
+            obj.circleDomain = 0:(2*pi/obj.q):(2*pi);
+            obj.waveDomain = 0:(obj.quantumN*2*pi/obj.q):(obj.quantumN*2*pi);
         end
         
         function wavefuncion = getWavefunc(obj, time, arithmeticType, amplitudeAxes)
