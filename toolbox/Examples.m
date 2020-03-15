@@ -9,8 +9,8 @@ format compact
 % wavefunctionEx
 % plotEx
 % quantumNEx1
-% quantumNEx2
-waveEx
+quantumNEx2
+% waveEx
 
 %% CIRCLE (ex. 1)
 function circleEx1
@@ -178,10 +178,11 @@ function plotEx
     radius2 = 3;
     centrePoint2 = [1 1 1];
     fixedCoordinate2 = 'z';
+    q = 360;
     
-    circleHandle1 = Circle(radius1, centrePoint1, fixedCoordinate1);
+    circleHandle1 = Circle(radius1, centrePoint1, fixedCoordinate1, q);
     circle1 = getCircle(circleHandle1);
-    circleHandle2 = Circle(radius2, centrePoint2, fixedCoordinate2);
+    circleHandle2 = Circle(radius2, centrePoint2, fixedCoordinate2, q);
     circle2 = getCircle(circleHandle2);
     
     % Create a spiral
@@ -191,7 +192,7 @@ function plotEx
     fixedCoordinate = 'z';
     noOfLaps = 2;
     
-	spiralHandle = Spiral(rMin, rMax, centrePoint, fixedCoordinate, noOfLaps);
+	spiralHandle = Spiral(rMin, rMax, centrePoint, fixedCoordinate, noOfLaps, q);
 	spiral = getSpiral(spiralHandle);
     
     % Create a paraboloid
@@ -233,10 +234,12 @@ end
 
 %% QUANTUMN (ex. 1)
 function quantumNEx1
+    input = 15000;
+    type = 'speed';
     radius = 0.000003;
-    linearSpeed = 15000;
+    relCorrection = false;
 
-    quantumN = QuantumN(radius, linearSpeed);
+    quantumN = QuantumN(input, type, radius, relCorrection);
 	list = getTheList(quantumN);
     
     disp(list);
@@ -245,31 +248,31 @@ end
 %% QUANTUMN (ex. 2)
 function quantumNEx2
     % Determine the list of allowed quantum numbers
-    linearSpeed = 15000;
-    radius = 0.000003;
+    input = 3*10^(-19);
+    type = 'energy';
+    radius = 0.0001;
+    relCorrection = true;
+    q = 2000;
 
-    quantumN = QuantumN(linearSpeed, radius);
+    quantumN = QuantumN(input, type, radius, relCorrection);
     list = getTheList(quantumN);
 
     % Generating wavefunction for each quantum number
     time = 0;
     arythmeticType = 'sin';
-    wavefunction = [];
     amplitudeAxes = 'xy';
-
-    for i = size(list)
-        wavefunctionHandle = Wavefunction(radius, list(1));
-        wavefunction = [wavefunction, getWavefunc(wavefunctionHandle, time, arythmeticType, amplitudeAxes).coordinates];
-    end
-
+    
     % Superimposing wavefunction in each x, y, z direction
-    sumx = zeros(1, 201);
-    sumy = zeros(1, 201);
-    sumz = zeros(1, 201);
-    for i = 1:3:size(list)
-        sumx = sumx + wavefunction{i};
-        sumy = sumy + wavefunction{i+1};
-        sumz = sumz + wavefunction{i+2};
+    sumx0 = zeros(1, q+1);
+    sumy0 = zeros(1, q+1);
+    sumz0 = zeros(1, q+1);
+    
+    for i = 1:length(list)
+        wavefunctionHandle = Wavefunction(radius, list(i), q);
+        coordinates = getWavefunc(wavefunctionHandle, time, arythmeticType, amplitudeAxes).coordinates;
+        sumx0 = sumx0 + (1/sqrt((length(list)))).*coordinates{1};
+        sumy0 = sumy0 + (1/sqrt((length(list)))).*coordinates{2};
+        sumz0 = sumz0 + (1/sqrt((length(list)))).*coordinates{3};
     end
 
     % Define m-by-n layout (two tiles)
@@ -284,17 +287,17 @@ function quantumNEx2
     axesNames1 = {'x', 'y', 'Imaginary axis'};
     size1 = [0 0 0 0 0 0]; % forces: axis auto
     title2 = "Decomposed wavefunction";
-    axesNames2 = {'Angle (200 = 2\pi)', 'Spatial coordinate'};
-    size2 = [0 201 -400 400];
+    axesNames2 = {'Angle (deg)', 'Spatial coordinate'};
+    size2 = [0 0 0 0];
 
     layout = defineTile(layout, title1, axesNames1, size1);
     layout = defineTile(layout, title2, axesNames2, size2);
 
     % Add plots to tiles
-    layout = addPlot(layout, 1, {sumx sumy sumz}, '-', 'k', 0.5, "Wavefunction");
-    layout = addPlot(layout, 2, {1:201 sumx}, '-', 'c', 0.5, "X-component");
-    layout = addPlot(layout, 2, {1:201 sumy}, '-', 'm', 0.5, "Y-component");
-    layout = addPlot(layout, 2, {1:201 sumz}, '-', 'g', 0.5, "Imaginary component");
+    layout = addPlot(layout, 1, {sumx0 sumy0 sumz0}, '-', 'k', 0.5, "Wavefunction");
+    layout = addPlot(layout, 2, {1:q+1 sumx0}, '-', 'c', 0.5, "X-component");
+    layout = addPlot(layout, 2, {1:q+1 sumy0}, '-', 'm', 0.5, "Y-component");
+    layout = addPlot(layout, 2, {1:q+1 sumz0}, '-', 'g', 0.5, "Imaginary component");
 
     % Draw the layout
     drawLayout(layout);

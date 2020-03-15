@@ -2,7 +2,7 @@
 % circular path it calcualtes quantum numbers of electron's allowed quantum
 % states.
 %
-%   obj = QuantumN(linearSpeed, radius), constructor, validates input,
+%   obj = QuantumN(input, type, radius, relCorrection), constructor, validates input,
 %       calculates initial values of the energy (classical kinetic energy)
 %       and quantum number. It utilises while loop to determine the range
 %       of *allowed quantum numbers.
@@ -10,8 +10,14 @@
 %       so that all the levels fit in the classical kinetic (initial)
 %       energy.
 %           Input:
-%       'linearSpeed': positive number, linear speed of an electron
+%       'input': positive number, linear speed of an electron or its
+%       kinetic energy
+%       'type': string of characters, can take either 'speed' or 'energy'
+%       value
 %       'radius': positive number, radius of the electron's circular path
+%       'relCorrection': boolean; if true, applies relativistic correction
+%       from perturbation theory to the kinetic energy (quantum number
+%       equation changes as well as it is derived from the kinetic energy).
 %           Output:
 %       'obj': object of the class
 %
@@ -31,6 +37,12 @@
 %           list = getTheList(quantumN);
 %       Output: 390    16     6     4     2
 %
+%   Updates:
+%       10/03/2020: Added perturbation theory correction for energy as well
+%       as possibility of feeding the function with either speed or kinetic
+%       energy. Therefore, input of the constructor was changed - before:
+%       (linearSpeed, radius).
+%
 %   Use:
 %       Such a list (each element) can be fed into WAVEFUNCTION object 
 %       to generate allowed wavefunctions of an electron (taking a circular
@@ -46,24 +58,62 @@ classdef QuantumN
     properties
         hbar = 1.05*10.^(-34); % Modified Planck's constant
         me = 9.1094*10.^(-31); % Electron rest mass
-        linearSpeed {mustBePositive} = 1
+        c = 3*10^8; % Speed of light in vacuum
+        restMassEnergy % Energy due to mass
+        
+        input {mustBePositive} = 1
+        type {mustBeMember(type, {'speed', 'energy'})} = 'energy'
         radius {mustBePositive} = 1
+        relCorrection
+        
         initialEnergy
+        
         quantumN
         quantNumbers = []
     end
     methods
-        function obj = QuantumN(linearSpeed, radius)
+        function obj = QuantumN(input, type, radius, relCorrection)
             % Input validation
-            obj.linearSpeed = linearSpeed;
+            obj.input = input;
+            obj.type = type;
             obj.radius = radius;
+            if ~islogical(relCorrection)
+                error("relCorrection must be logical value!")
+            else
+                obj.relCorrection = relCorrection;
+            end
             
-            % Classical kinetic (initial) energy based on the linear speed
-            % of an electron
-            obj.initialEnergy = (obj.me*obj.linearSpeed^2)/2;
-            % Quantum number based on the classical energy and circular
-            % trajectory radius
-            obj.quantumN = (obj.radius/obj.hbar)*sqrt(2*obj.me*obj.initialEnergy);
+            % Define energy due to mass
+            obj.restMassEnergy = obj.me*obj.c^2;
+            
+            if length(type) == 6 % input is a kinetic energy
+                obj.initialEnergy = obj.input;
+            else
+                % obj.input is the speed value
+                if obj.relCorrection % Considering relativistic approximation
+                    obj.initialEnergy = obj.restMassEnergy/sqrt(1-(obj.input/obj.c)^2) - obj.restMassEnergy;
+                else % Considering classical system - no correction
+                    obj.initialEnergy = (obj.me*obj.input^2)/2;
+                end
+            end
+            
+            unperturbedEnergy = @(n) ((n^2)*(obj.hbar^2))/(2*obj.me*(obj.radius^2));
+
+            if obj.relCorrection 
+                % Relativistically corrected n number
+                quantumN = @(E) sqrt((obj.restMassEnergy - obj.restMassEnergy*sqrt(1-2*(E/obj.restMassEnergy)))/unperturbedEnergy(1)); 
+                % Correction for relativistic system was from perturbation
+                % theory
+                correction = @(n) (1/(2*obj.restMassEnergy))*(unperturbedEnergy(n))^2;
+            else
+                % Quantum number based on the classical energy and circular
+                % trajectory radius
+                quantumN = @(E) (obj.radius/obj.hbar)*sqrt(2*obj.me*E);
+                % Correction for classical system
+                correction = @(n) 0;
+            end
+            
+            obj.quantumN = quantumN(obj.initialEnergy);
             
             % Loop through as long as quantum number is greater or equal 2
             while obj.quantumN >= 2
@@ -86,10 +136,9 @@ classdef QuantumN
                 % Overwrite energy with the quantum energy 
                 % subtracted from the initial energy (the value from the  
                 % past iteration or the classical initial energy)
-                obj.initialEnergy = obj.initialEnergy - ((obj.quantumN^2)*(obj.hbar^2))/(2*obj.me*(obj.radius^2));
+                obj.initialEnergy = obj.initialEnergy - (unperturbedEnergy(obj.quantumN) - correction(obj.quantumN));
                 
-                % Based on the energy value, calculate new quantum number
-                obj.quantumN = (obj.radius/obj.hbar)*sqrt(2*obj.me*obj.initialEnergy);
+                obj.quantumN = quantumN(obj.initialEnergy);
             end
         end
         
