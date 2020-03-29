@@ -140,7 +140,7 @@
 %
 %   See also:
 %       PARABOLOID, SPIRAL, CIRCLE, WAVEFUNCTION, QUANTUMN,
-%       ENERGYAPPROXIMATION, WAVE
+%       ENERGYAPPROXIMATION, WAVE, GIF
 %
 %   Patryk Jesionka, 2019
 
@@ -160,7 +160,7 @@ classdef Plot
         % tile = struct('title', [], 'axesNames', [], 'size', [], 'dimensions', [], 'plots', {})
         % Structure containing plots data
         plt = struct('coordinatesArray', [], 'lineStyle', [], 'lineColor', [], 'lineWidth', [], 'name', [], 'type', 'plot')
-        srf = struct('syrfaceArray', [], 'edgeColor', [], 'lineStyle', [], 'faceColor', [], 'faceAlpha', [], 'name', [], 'type', 'surface')
+        srf = struct('surfaceArray', [], 'edgeColor', [], 'lineStyle', [], 'faceColor', [], 'faceAlpha', [], 'name', [], 'type', 'surface')
         
         % Plot properties - used to validate user input and set default
         % values.

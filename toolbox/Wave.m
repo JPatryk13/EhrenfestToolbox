@@ -45,7 +45,7 @@
 %
 %   See also:
 %       PARABOLOID, SPIRAL, CIRCLE, PLOT, QUANTUMN, ENERGYAPPROXIMATION,
-%       WAVEFUNCTION
+%       WAVEFUNCTION, GIF
 %
 %   Patryk Jesionka, 2020
 

@@ -50,7 +50,7 @@
 %
 %   See also:
 %       PARABOLOID, SPIRAL, WAVEFUNCTION, PLOT, CIRCLE,
-%       ENERGYAPPROXIMATION, WAVE
+%       ENERGYAPPROXIMATION, WAVE, GIF
 %
 %   Patryk Jesionka, Maciej Makuch, 2019
 

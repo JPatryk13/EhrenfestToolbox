@@ -62,7 +62,7 @@
 %
 %   See also:
 %       PARABOLOID, SPIRAL, CIRCLE, PLOT, QUANTUMN, ENERGYAPPROXIMATION,
-%       WAVE
+%       WAVE, GIF
 %
 %   Patryk Jesionka, 2019
 

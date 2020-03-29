@@ -50,7 +50,7 @@
 %
 %   See also:
 %       CIRCLE, SPIRAL, WAVEFUNCTION, PLOT, QUANTUMN, ENERGYAPPROXIMATION,
-%       WAVE
+%       WAVE, GIF
 %
 %   Patryk Jesionka, 2019
 
