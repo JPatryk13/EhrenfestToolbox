@@ -18,6 +18,8 @@
 %       ENERGYAPPROXIMATION, WAVE, PLOT
 %
 %   Patryk Jesionka, 2020
+%
+% Note: haven't tested for surfaces plotting
 
 classdef Gif
     properties
