@@ -126,6 +126,8 @@
 %
 %            drawLayout(layout);
 %
+%   Updates:
+%       01/04/2020: Addeded support for Marker line specification.
 %
 %   Use:
 %       It is recommended to use other classes of the EhrenfestToolbox to 
@@ -159,12 +161,13 @@ classdef Plot
         % Structure containing its pieces of information and plots
         % tile = struct('title', [], 'axesNames', [], 'size', [], 'dimensions', [], 'plots', {})
         % Structure containing plots data
-        plt = struct('coordinatesArray', [], 'lineStyle', [], 'lineColor', [], 'lineWidth', [], 'name', [], 'type', 'plot')
+        plt = struct('coordinatesArray', [], 'lineStyle', [], 'Marker', [], 'lineColor', [], 'lineWidth', [], 'name', [], 'type', 'plot')
         srf = struct('surfaceArray', [], 'edgeColor', [], 'lineStyle', [], 'faceColor', [], 'faceAlpha', [], 'name', [], 'type', 'surface')
         
         % Plot properties - used to validate user input and set default
         % values.
-        lineStyle {mustBeMember(lineStyle, {'-', '--', ':', '-.'})} = '-'
+        lineStyle {mustBeMember(lineStyle, {'-', '--', ':', '-.', 'none'})} = '-'
+        Marker {mustBeMember(Marker, {'o', '+', '*', 'x', 'd', 'p', 'none'})} = 'none'
         lineColor {mustBeMember(lineColor, {'r', 'g', 'b', 'w', 'c', 'm', 'y', 'k'})} = 'k'
         lineWidth {mustBePositive} = 0.5
         
@@ -188,6 +191,7 @@ classdef Plot
             
             % Setting properties
             p.LineStyle = object.lineStyle;
+            p.Marker = object.Marker;
             p.Color = object.lineColor;
             p.LineWidth = object.lineWidth;
             p.DisplayName = object.name;
@@ -287,7 +291,7 @@ classdef Plot
             end
         end
         
-        function obj = addPlot(obj, tileNo, pltArray, lStyle, lColor, lWidth, name)
+        function obj = addPlot(obj, tileNo, pltArray, lStyle, Marker, lColor, lWidth, name)
             % Input validation
             if tileNo <= 0 && tileNo >= obj.noOfTiles
                 error("Invalid tile number specified!");
@@ -301,12 +305,14 @@ classdef Plot
                 error("Name of the plot must be a string type!");
             end
             obj.lineStyle = lStyle;
+            obj.Marker = Marker;
             obj.lineColor = lColor;
             obj.lineWidth = lWidth;
             
             % Assigning data to the plot2d structure
             obj.plt.coordinatesArray = pltArray;
             obj.plt.lineStyle = obj.lineStyle;
+            obj.plt.Marker = obj.Marker;
             obj.plt.lineColor = obj.lineColor;
             obj.plt.lineWidth = obj.lineWidth;
             obj.plt.name = name;
