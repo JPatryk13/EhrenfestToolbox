@@ -11,7 +11,8 @@ format compact
 % quantumNEx1
 % quantumNEx2
 % waveEx
-gifEx
+% gifEx
+davidovicRodsEx
 
 %% CIRCLE (ex. 1)
 function circleEx1
@@ -375,4 +376,13 @@ function gifEx
     gif = addPlotGif(gif, pltStruct1, lStyle1, lColor1, lWidth1, name1);
     gif = addPlotGif(gif, pltStruct2, lStyle2, lColor2, lWidth2, name2);
     drawGif(gif, fileName);
+end
+
+%% DAVIDOVICRODS (ex.)
+function davidovicRodsEx
+    noOfRods = 10;
+    radius = 2;
+    speed = 0*10^8:0.5*10^8:2.5*10^8;
+
+    DavR = DavidovicRods(noOfRods, radius, speed);
 end
