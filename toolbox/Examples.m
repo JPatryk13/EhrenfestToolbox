@@ -385,4 +385,5 @@ function davidovicRodsEx
     speed = 0*10^8:0.5*10^8:2.5*10^8;
 
     DavR = DavidovicRods(noOfRods, radius, speed);
+    starDisk(DavR);
 end
