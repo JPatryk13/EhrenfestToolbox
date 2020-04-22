@@ -28,15 +28,18 @@ coronaCases = readmatrix(fileName);
 days = coronaCases(:,1) - 43861;
 cases = coronaCases(:,3);
 
-days1 = 1:57; % day 56: 27/03/2020
+days1 = 1:59; % day 56: 27/03/2020
 func1 = curveFit(40, coronaCases); % 10/03/2020
-days2 = 1:(length(cases) - 1);
+days2 = 1:65; % day 66: 06/04/2020
 func2 = curveFit(55, coronaCases); % 25/03/2020
+days3 = 1:(length(cases) - 1);
+func3 = curveFit(65, coronaCases); % 06/04/2020
 
 % Plot data and the curve
 plot(days, cases, 'kd',...
      days1, func1(days1), 'r-',...
-     days2, func2(days2), 'g-');
+     days2, func2(days2), 'g-',...
+     days3, func3(days3), 'b-');
 
 % Set title
 title("Number of COVID-19 cases from 31/01/2020 (The 0 Day)");
@@ -44,7 +47,8 @@ title("Number of COVID-19 cases from 31/01/2020 (The 0 Day)");
 % Add legend
 lgd = legend("Number of confirmed cases",...
              "Exponential growth - approximation" + newline + "based on the first 40 days",...
-             "Approximation based on the first 55" + newline + "days of breakdown");
+             "Approximation based on the first 55" + newline + "days of breakdown",...
+             "Approximation based on the first 65" + newline + "days of breakdown");
 lgd.Location = 'northwest';
 
 % Add labels
@@ -57,7 +61,9 @@ text(length(days)-1, cases(length(days)),...
 text(length(days1), func1(length(days1)),...
      "(" + int2str(func1(length(days1))) + ", 27/03/2020) ", 'HorizontalAlignment', 'right');
 text(length(days2), func2(length(days2)),...
-    int2str(func2(length(days2))) + "  ", 'HorizontalAlignment', 'right');
+     "(" + int2str(func2(length(days2))) + ", 06/04/2020) ", 'HorizontalAlignment', 'right');
+text(length(days3), func3(length(days3)),...
+     int2str(func3(length(days3))) + "  ", 'HorizontalAlignment', 'right');
 
 % Turn the grid on
 grid on

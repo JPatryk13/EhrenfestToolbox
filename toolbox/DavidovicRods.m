@@ -127,8 +127,8 @@ classdef DavidovicRods
                 
                 % Add plots to a tile
                 for j = 1:obj.noOfRods
-                    layout = addPlot(layout, i, rod(j,:), '-', 'k', 4, "Tangent");
-                    layout = addPlot(layout, i, r(j,:), '-.', 'b', 0.5, "Radius");
+                    layout = addPlot(layout, i, rod(j,:), '-', 'none', 'k', 4, "Tangent");
+                    layout = addPlot(layout, i, r(j,:), '-.', 'none', 'b', 0.5, "Radius");
                 end
             end
             
