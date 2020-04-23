@@ -110,7 +110,7 @@ classdef Spiral
             
             % Validation functions
             validRadius = @(x) gt(x, 0) && isreal(x) && isnumeric(x) && isfinite(x) && isscalar(x);
-            validCentrePoint = @(x) isreal(x) && isnumeric(x) && all(isfinite(x)) && isrow(x) && (eq(length(x), 2) || eq(length(x), 3));
+            validCentrePoint = @(x) all(isreal(x)) && all(isnumeric(x)) && all(isfinite(x)) && isrow(x) && (eq(length(x), 2) || eq(length(x), 3));
             validFixedCoordinate = @(x) ischar(x) && ismember(x, {'x', 'y', 'z'});
             validNoOfLaps = @(x) ge(x, 0) && isreal(x) && isnumeric(x) && isfinite(x) && isscalar(x) && eq(x, floor(x));
             validQ = @(x) validRadius(x) && eq(x, floor(x));
