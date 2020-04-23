@@ -1,13 +1,15 @@
-% CHANGENOTATIONTYPE - 
+% CHANGENOTATIONTYPE - converts numbers into strings in scientific or e
+% notation.
 %
 %   strNumber = changeNotationType(number, type)
+%
 %           Input:
-%       'number': float value that meant to be converted to string and
-%       displayed with scientific notation.
-%       'type': char, either 's' or 'e' - decides on whether scientific or 
-%       e notation should be used 
+%       'number':       float value that meant to be converted to string
+%                       and displayed with scientific notation.
+%       'type':         char, either 's' or 'e' - decides on whether 
+%                       scientific or e notation should be used 
 %           Output:
-%       'strNumber': converted number as a string of characters
+%       'strNumber':    converted number as a string of characters
 %
 %   Limitations:
 %       Rounds output value to two decimal places. Can handle numbers from
@@ -26,21 +28,24 @@
 %       ENERGYAPPROXIMATION, WAVE, PLOT, GIF, DAVIDOVICRODS
 %
 %   Patryk Jesionka, 2020
-%
-% Note: haven't tested for surfaces plotting
 
 function strNumber = changeNotationType(number, type)
+    % User input validaiton
+    if ~isnumeric(number) || ~isreal(number) || ~isfinite(number) || ~isscalar(number)
+        error("number must be numberic.");
+    end
+    if ~ismember(type, {'s', 'e'})
+        error("type should be a character value, 's' or 'e'.");
+    end
+    
     % Define prefix based on the type value
     if type == 's'
         preffix = "\times10^";
     elseif type == 'e'
         preffix = "e";
-    else % User input validaiton
-        error("type should be a character value, 's' or 'e'.");
     end
-    if ~isnumeric(number)
-        error("number must be numberic.");
-    end
+    
+    % Convert number to an appropriate string and add defined prefix
     if (number < 10 && number >= 0.1) || (number > -10 && number <= -0.1) || (number == 0)
         strNumber = string(number);
     else
@@ -50,5 +55,6 @@ function strNumber = changeNotationType(number, type)
             end
         end
     end
+    
 end
 
