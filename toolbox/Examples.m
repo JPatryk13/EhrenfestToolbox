@@ -3,7 +3,7 @@ format compact
 % circleEx1
 % circleEx2
 % spiralEx1
-spiralEx2
+% spiralEx2
 % paraboloidEx1
 % paraboloidEx2
 % wavefunctionEx
@@ -24,7 +24,7 @@ function circleEx1
     circle = getCircle(circleHandle);
     
     plot(circle.coordinates{1}, circle.coordinates{2});
-    axis(circle.size);
+    axis(circle.size.*2);
     
     view(2)
     xlabel('x')
@@ -99,12 +99,12 @@ end
 
 %% PARABOLOID (ex. 1)
 function paraboloidEx1
-    centrePoint = [0 0 0];
+    % Create a paraboloid centred at x = 1, y = 3 with default class
+    % parameters and mesh density 0.5.
+
     semiAxes = [1 3];
-    orientation = '+';
-    meshDens = 5;
     
-    paraboloidHandle = Paraboloid(centrePoint, semiAxes, orientation, meshDens);
+    paraboloidHandle = Paraboloid(semiAxes, 'meshDens', 0.5);
     paraboloid = getParaboloid(paraboloidHandle);
     
     surf(paraboloid.coordinates{1}, paraboloid.coordinates{2}, paraboloid.coordinates{3});
@@ -119,12 +119,13 @@ end
 
 %% PARABOLOID (ex. 2)
 function paraboloidEx2
-    centrePoint = [3 3 1];
-    semiAxes = [1 -1];
-    orientation = '+';
-    meshDens = 25;
+    % Create reversed hyperbolic paraboloid centred at x = 1, y = 1.
+
+    semiAxes = [1 1];
     
-    paraboloidHandle = Paraboloid(centrePoint, semiAxes, orientation, meshDens);
+    paraboloidHandle = Paraboloid(semiAxes, 'centrePoint', [3 3 1],...
+                                            'orientation', '-',...
+                                            'type', 'hyperbolic');
     paraboloid = getParaboloid(paraboloidHandle);
     
     surf(paraboloid.coordinates{1}, paraboloid.coordinates{2}, paraboloid.coordinates{3});
