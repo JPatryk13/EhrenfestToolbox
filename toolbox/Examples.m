@@ -2,7 +2,7 @@ format compact
 
 % circleEx1
 % circleEx2
-% spiralEx1
+spiralEx1
 % spiralEx2
 % paraboloidEx1
 % paraboloidEx2
@@ -12,18 +12,15 @@ format compact
 % quantumNEx2
 % waveEx
 % gifEx
-davidovicRodsEx
+% davidovicRodsEx
 
 %% CIRCLE (ex. 1)
 function circleEx1
-    % Create a circle in 2D (x-y plane) with radius 5, centred at [0, 0]
+    % Create a circle with radius 5 and default CIRCLE input
     
     radius = 5;
-    centrePoint = [0 0];
-    fixedCoordinate = 'z';
-    q = 360;
     
-    circleHandle = Circle(radius, centrePoint, fixedCoordinate, q);
+    circleHandle = Circle(radius);
     circle = getCircle(circleHandle);
     
     plot(circle.coordinates{1}, circle.coordinates{2});
@@ -41,11 +38,9 @@ function circleEx2
     % at [0, 3.14, 3.14] - it is plotted on the y-z surface at x = 0.
     
     radius = 3.14;
-    centrePoint = [0 3.14 3.14];
-    fixedCoordinate = 'x';
-    q = 360;
     
-    circleHandle = Circle(radius, centrePoint, fixedCoordinate, q);
+    circleHandle = Circle(radius, 'centrePoint', [0 3.14 3.14],...
+                                  'fixedCoordinate', 'x');
     circle = getCircle(circleHandle);
     
     plot3(circle.coordinates{1}, circle.coordinates{2}, circle.coordinates{3});
