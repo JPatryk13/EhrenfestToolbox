@@ -89,7 +89,7 @@ classdef Circle
             addParameter(p, 'fixedCoordinate', defaultFixedCoordinate, validFixedCoordinate);
             addParameter(p, 'q', defaultQ, validQ);
             
-            parse(p, radius, varargin{:})
+            parse(p, radius, varargin{:});
             
             % Extract variables from the parser
             radius = p.Results.radius;
