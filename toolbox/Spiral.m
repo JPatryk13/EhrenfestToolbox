@@ -10,7 +10,7 @@
 %       *Approach similar to the Circle class'; however, radius range and
 %       number of laps is a factor in the coordinates generation.
 %
-%           Input parameter names:
+%           Input parameters' names:
 %       'rMin', 'rMax': (required), nonnegative numbers ('rMax' must be
 %                       greater than 'rMin'), range of radii in between
 %                       which the spiral is plotted.
