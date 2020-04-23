@@ -126,7 +126,7 @@ classdef Circle
                 % Based on fixedCoordinate sets orientation of the circle
                 % by assigning a, b and c (which is 'fixed') to appropriate
                 % coordinates x, y and z.
-                if obj.fixedCoordinate == 'x'
+                if fixedCoordinate == 'x'
                     obj.circle.coordinates = {x+c y+a z+b};
                 elseif fixedCoordinate == 'y'
                     obj.circle.coordinates = {x+a y+c z+b};
