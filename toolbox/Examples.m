@@ -2,8 +2,8 @@ format compact
 
 % circleEx1
 % circleEx2
-spiralEx1
-% spiralEx2
+% spiralEx1
+spiralEx2
 % paraboloidEx1
 % paraboloidEx2
 % wavefunctionEx
@@ -55,17 +55,12 @@ end
 
 %% SPIRAL (ex. 1)
 function spiralEx1
-    % Create a spiral in 2D (x-y plane) with radii range from 3 to 5, 
-    % centred at [0, 0] and 1 lap.
+    % Create a spiral with radii range from 3 to 5 an default SPIRAL input
     
     rMin = 3;
     rMax = 5;
-    centrePoint = [0 0];
-    fixedCoordinate = 'z';
-    noOfLaps = 1;
-    q = 360;
     
-    spiralHandle = Spiral(rMin, rMax, centrePoint, fixedCoordinate, noOfLaps, q);
+    spiralHandle = Spiral(rMin, rMax);
 	spiral = getSpiral(spiralHandle);
     
 	plot(spiral.coordinates{1}, spiral.coordinates{2});
@@ -85,12 +80,11 @@ function spiralEx2
     
     rMin = 6.28;
     rMax = 12.56;
-    centrePoint = [0 3.14 3.14];
-    fixedCoordinate = 'x';
-    noOfLaps = 4;
-    q = 360;
     
-    spiralHandle = Spiral(rMin, rMax, centrePoint, fixedCoordinate, noOfLaps, q);
+    spiralHandle = Spiral(rMin, rMax, 'centrePoint', [0 3.14 3.14],...
+                                      'fixedCoordinate', 'x',...
+                                      'noOfLaps', 4,...
+                                      'q', 180);
 	spiral = getSpiral(spiralHandle);
     
 	plot3(spiral.coordinates{1}, spiral.coordinates{2}, spiral.coordinates{3});
