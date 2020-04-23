@@ -141,7 +141,7 @@ classdef Spiral
             noOfLaps = p.Results.noOfLaps;
             q = p.Results.q;
             
-            % Separate coordinates of circle's centre
+            % Separate coordinates of spiral's centre
             x = centrePoint(1);
             y = centrePoint(2);
             if length(centrePoint) == 3
