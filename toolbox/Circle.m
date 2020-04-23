@@ -7,6 +7,7 @@
 %       based on the 'fixedCoordinate' decides on the orientation of the
 %       circle in 3D space and assigns data (with determined preferred size 
 %       of the plot) to the structure.
+%
 %           Input parameter names:
 %       'radius':       (required), nonnegative number, radius of a circle 
 %                       to create
@@ -19,13 +20,14 @@
 %                       the letter here states the axis in along which the
 %                       circle should be flat. It is related to the
 %                       limitation of the class.
-%       'q':            must be positive integer, quality factor (see 
-%                       Updates).
+%       'q':            360 (default), must be positive integer, quality 
+%                       factor (see Updates).
 %           Output:
 %       'obj':          object of the class
 %
 %   circle = getCircle(obj)
 %       extract generated data
+%
 %           Input:
 %       'obj':          object of the class
 %           Output:
@@ -38,14 +40,14 @@
 %       circle is plotted on) must be parallel to one of the axes.
 %
 %   Examples:
-%       functions circleEx1, circleRx2 in Examples.m
+%       functions circleEx1, circleEx2 in Examples.m
 %
 %   Updates:
 %       01/03/2020: Added quality factor (constructor). Need for unifying
 %           CIRCLE, WAVEFUNCTION and  SPIRAL classes' output - number of
 %           elements in the coordinates array must be the same when plotted
 %           together.
-%       22/04/2020: Added input parser
+%       22/04/2020: Added input parser.
 %
 %   Use:
 %       Such a structure ('circle') can be fed into standard MATLAB
