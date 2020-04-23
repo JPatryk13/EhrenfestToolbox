@@ -30,7 +30,7 @@
 %       'obj':          object of the class
 %
 %   spiral = getSpiral(obj)
-%       extract generated data
+%       extract generated data.
 %
 %           Input:
 %       'obj':          object of the class
@@ -43,9 +43,9 @@
 %       coordinates based on the radii range and angle array.
 %       
 %           Input:
-%       'obj': object of the class
+%       'obj':          object of the class
 %           Output:
-%       [a, b]: a pair of arrays with coordinates
+%       [a, b]:         a pair of arrays with coordinates
 %
 %   Limitations:
 %       Generated spiral cannot be oriented freely in 3D space. I.e.
@@ -53,7 +53,7 @@
 %       spiral is plotted on) must be parallel to one of the axes.
 %
 %   Examples:
-%       functions spiralEx1, spiralEx2 in Examples.m
+%       Functions spiralEx1, spiralEx2 in Examples.m
 %
 %   Updates:
 %       01/03/2020: Added quality factor (constructor). Need for unifying

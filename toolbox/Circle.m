@@ -26,7 +26,7 @@
 %       'obj':          object of the class
 %
 %   circle = getCircle(obj)
-%       extract generated data
+%       extract generated data.
 %
 %           Input:
 %       'obj':          object of the class
@@ -40,7 +40,7 @@
 %       circle is plotted on) must be parallel to one of the axes.
 %
 %   Examples:
-%       functions circleEx1, circleEx2 in Examples.m
+%       Functions circleEx1, circleEx2 in Examples.m
 %
 %   Updates:
 %       01/03/2020: Added quality factor (constructor). Need for unifying
