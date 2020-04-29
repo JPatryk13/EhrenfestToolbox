@@ -2,31 +2,41 @@
 % the wavefunction. It draws the amplitude in the same plane as the
 % circular trajectory of a particle.
 %
-%   obj = Wavefunction(radius, quantumN, q), constructor,
-%       validates user input, defines base properties of the wavefunction
-%       and its domains.
-%           Input:
-%       'radius': nonnegative number, radius of a circle to create
-%       'quantumN': nonnegative, even integer value, quantum number for
-%       frequency, period and wavedomain of the function.
-%       'q': must be positive integer, quality factor (see Updates).
-%           Output:
-%       'obj': object of the class.
+%   obj = Wavefunction(radius, quantumN)
+%   obj = Wavefunction(radius, quantumN, q)
+%       constructor, validates user input, defines base properties of the
+%       wavefunction and its domains.
 %
-%   wavefuncion = getWavefunc(obj, time, arithmeticType, amplitudeAxes), 
+%           Input parameters' names:
+%       'radius':       (required), nonnegative number, radius of a circle
+%                       to create.
+%       'quantumN':     (required), nonnegative, even integer value,
+%                       quantum number for frequency, period and wavedomain
+%                       of the function.
+%       'q':            360 (default), must be positive integer, quality 
+%                       factor (see Updates).
+%           Output:
+%       'obj':          object of the class.
+%
+%   wavefuncion = getWavefunc(obj, time)
+%   wavefuncion = getWavefunc(obj, time, Name, Value) 
 %       validates input, generates wavefunction of the type specified and 
 %       returns the structure.
-%           Input:
-%       'obj': object of the class.
-%       'time': nonnegative value, wavefunction is time dependent therefore
-%       the output coordinates vary with time parameter.
-%       'arithmeticType': 'sin' or 'cos' string, specifies which of the
-%       component of the wavefunction must be returned with the structure.
-%       'amplitudeAxes': which type of the data should be returned (look:
-%       Updates)
+%
+%           Input parameters' names:
+%       'obj':              object of the class.
+%       'time':             (required), nonnegative value, wavefunction is
+%                           time dependendent therefore the output
+%                           coordinates vary with time parameter.
+%       'arithmeticType':   'sin' (default), 'sin' or 'cos' string,
+%                           specifies which of the component of the
+%                           wavefunction must be returned with the
+%                           structure.
+%       'amplitudeAxes':    'xy' (required), which type of the data should
+%                           be returned (see Updates)
 %           Output:
-%       'wavefunction': structure containing 'coordinates' and 'size'
-%       arrays.
+%       'wavefunction':     structure containing 'coordinates' and 'size'
+%                           arrays.
 %
 %   Limitations:
 %       Data passed to the functions must be physically sensible - e.g.
@@ -34,14 +44,7 @@
 %       number.
 %
 %   Examples:
-%       Plot 'sin' component of a wavefunction for the time, t=0 and
-%       quantum state described by n=6 for an electron travelling around
-%       the circle of radius, r=0.1
-%           wavefunctionHandle = Wavefunction(0.1, 6);
-%           wavefunction = getWavefunc(wavefunctionHandle, 0, 'sin');
-%           plot3(wavefunction.coordinates{1}, wavefunction.coordinates{2},
-%                 wavefunction.coordinates{3});
-%           axis(wavefunction.size)
+%       Function wavefunctionEx in Examples.m
 %
 %   Updates:
 %       27/02/2020: Added new input parameter in getWavefunc(),
@@ -54,6 +57,7 @@
 %       01/03/2020: Added quality factor (constructor). Need for unifying
 %           CIRCLE, WAVEFUNCTION and  SPIRAL classes' output number of
 %           steps replaced with freedom of choice.
+%       29/04/2020: Added input parser.
 %
 %   Use:
 %       Such a structure ('wavefunction') can be fed into standard MATLAB
@@ -62,7 +66,7 @@
 %
 %   See also:
 %       PARABOLOID, SPIRAL, CIRCLE, PLOT, QUANTUMN, ENERGYAPPROXIMATION,
-%       WAVE, GIF, DAVIDOVICRODS, CHANGENOTATIONTYPE
+%       WAVE, GIF, DAVIDOVICRODS, CHANGENOTATIONTYPE, FINDLIMITS
 %
 %   Patryk Jesionka, 2019
 
@@ -101,7 +105,7 @@ classdef Wavefunction
             % Adding arguments
             addRequired(p, 'radius', validRadius);
             addRequired(p, 'quantumN', validQuantumN);
-            addParameter(p, 'q', defaultQ, validQ);
+            addOptional(p, 'q', defaultQ, validQ);
             
             parse(p, radius, quantumN, varargin{:});
             
