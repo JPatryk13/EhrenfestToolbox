@@ -10,7 +10,7 @@ format compact
 % plotEx
 % quantumNEx1
 % quantumNEx2
-% waveEx
+waveEx
 % gifEx
 % davidovicRodsEx
 
@@ -140,16 +140,16 @@ end
 
 %% WAVEFUNCTION (ex.)
 function wavefunctionEx
+    % Plot 'sin' component of a wavefunction for the time, t=0 and quantum
+    % state described by n=6 for an electron travelling around the circle
+    % with radius, r=0.1
+
     radius = 0.1;
     quantumN = 6;
-    time = 0;
-    arithmeticType = 'sin';
-    amplitudeAxes = 'xy';
-    q = 360;
+    time = 1;
     
-    
-    wavefunctionHandle = Wavefunction(radius, quantumN, q);
-	wavefunction = getWavefunc(wavefunctionHandle, time, arithmeticType, amplitudeAxes);
+    wavefunctionHandle = Wavefunction(radius, quantumN);
+	wavefunction = getWavefunc(wavefunctionHandle, time);
     
 	plot3(wavefunction.coordinates{1}, wavefunction.coordinates{2}, wavefunction.coordinates{3});
 	axis(wavefunction.size)
@@ -297,21 +297,21 @@ end
 
 %% WAVE (ex.)
 function waveEx
+    % Plot a wavefunction of an electron which energy is described by
+    % n=8' It is travelling around the circular path of radius, r=0.1m.
+    % Desired type of the wavefunction is cosine at time, t=0
+    
     radius = 0.1;
-    centrePoint = [0 0 0];
-    fixedCoordinate = 'z';
     quantumN = 8;
     time = 0;
-    arithmeticType = 'cos';
-    q = 360;
     
     % Create a circle - wave horizontal axis
-    circleHandle = Circle(radius, centrePoint, fixedCoordinate, q);
+    circleHandle = Circle(radius, 'centrePoint', [0 0 0]);
     circle = getCircle(circleHandle);
 
     % Create a wave
-    waveHandle = Wave(radius, quantumN, q);
-    wave = getWave(waveHandle, time, arithmeticType);
+    waveHandle = Wave(radius, quantumN);
+    wave = getWave(waveHandle, time, 'arithmeticType', 'cos');
     
     plot3(wave.coordinates{1}, wave.coordinates{2}, wave.coordinates{3}, 'k', circle.coordinates{1}, circle.coordinates{2}, circle.coordinates{3}, '--');
     axis(wave.size)
