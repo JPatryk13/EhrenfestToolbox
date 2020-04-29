@@ -69,7 +69,6 @@
 classdef Wavefunction
     properties
         radius {mustBePositive} % Radius of the electron's path
-        quantumN {mustBeInteger} % Quantum number n
         
         hbar = 1.05*10.^(-34); % Modified Planck's constant
         me = 9.1094*10.^(-31); % Electron rest mass
@@ -79,8 +78,6 @@ classdef Wavefunction
         amp % Amplitude of the wave (normalisation constant)
         period % Time of the one escillation
         
-        q {mustBePositive, mustBeInteger} = 360 % Quality factor
-        
         circleDomain % Range from 0 to 2*pi (generating a circle)
         waveDomain % Range from 0 to 2*n*pi (generating a weve)
         
@@ -88,48 +85,76 @@ classdef Wavefunction
         wavefunc = struct('coordinates', [], 'size', [])
     end
     methods
-        function obj = Wavefunction(radius, quantumN, q)
-            % Input validation
-            obj.radius = radius;
-            obj.quantumN = quantumN;
-            obj.q = q;
-            % verification whether quantumN is even or not
-            if ~(mod(obj.quantumN, 2) == 0)
-                error("Quantum number n must be even!");
-            end
+        function obj = Wavefunction(radius, quantumN, varargin)
+            % Define default values
+            defaultQ = 360;
             
+            % Validation functions
+            validRadius = @(x) gt(x, 0) && isreal(x) && isnumeric(x) && isfinite(x) && isscalar(x);
+            validQuantumN = @(x) gt(x, 0) && isreal(x) && isnumeric(x) && isfinite(x) && eq(mod(x, 2), 0);
+            validQ = @(x) validRadius(x) && eq(x, floor(x));
+            
+            % Input parser
+            p = inputParser;
+            p.CaseSensitive = true;
+            
+            % Adding arguments
+            addRequired(p, 'radius', validRadius);
+            addRequired(p, 'quantumN', validQuantumN);
+            addParameter(p, 'q', defaultQ, validQ);
+            
+            parse(p, radius, quantumN, varargin{:});
+            
+            % Extract variables from the parser
+            obj.radius = p.Results.radius;
+            quantumN = p.Results.quantumN;
+            q = p.Results.q;
+                        
             % Calcualating the ratio
             obj.rat = obj.hbar/obj.me;
             
             % defining wave properties
-            obj.freq = ((obj.quantumN.^2).*obj.rat)./(2*(obj.radius.^2));
+            obj.freq = ((quantumN.^2).*obj.rat)./(2*(obj.radius.^2));
             obj.period = (2*pi)/obj.freq;
             obj.amp = (pi*obj.radius)^(-0.5);
             
             % defining domains
-            obj.circleDomain = 0:(2*pi/obj.q):(2*pi);
-            obj.waveDomain = 0:(obj.quantumN*2*pi/obj.q):(obj.quantumN*2*pi);
+            obj.circleDomain = 0:(2*pi/q):(2*pi);
+            obj.waveDomain = 0:(quantumN*2*pi/q):(quantumN*2*pi);
         end
         
-        function wavefuncion = getWavefunc(obj, time, arithmeticType, amplitudeAxes)
-            % Input validation
-            if time < 0
-                error("Time must be a positive value!");
-            end
-            if ~ismember(arithmeticType, {'sin', 'cos'})
-                error("arithmeticType must be either 'sin' or 'cos'!");
-            end
-            if ~ismember(amplitudeAxes, {'xy', 'z'})
-                error("amplitudeAxes must be either 'xy' or 'z'!");
-            end
+        function wavefuncion = getWavefunc(obj, time, varargin)
+            % Define default values
+            defaultArithmeticType = 'sin';
+            defaultAmplitudeAxes = 'xy';
             
+            % Validation functions
+            validTime = @(x) ge(x, 0) && isreal(x) && isnumeric(x) && isfinite(x) && isscalar(x);
+            validArithmeticType = @(x) ischar(x) && ismember(x, {'sin', 'cos'});
+            validAmplitudeAxes = @(x) ischar(x) && ismember(x, {'xy', 'z'});
+            
+            % Input parser
+            p = inputParser;
+            p.CaseSensitive = true;
+            
+            % Adding arguments
+            addRequired(p, 'time', validTime);
+            addParameter(p, 'arithmeticType', defaultArithmeticType, validArithmeticType);
+            addParameter(p, 'amplitudeAxes', defaultAmplitudeAxes, validAmplitudeAxes);
+            
+            parse(p, time, varargin{:});
+            
+            % Extract variables from the parser
+            time = p.Results.time;
+            arithmeticType = p.Results.arithmeticType;
+            amplitudeAxes = p.Results.amplitudeAxes;
             
             % Generating coordinates. Return coordinates of the
             % flower-shaped wavefunction if the 'amplitudeAxes' is
             % specified as 'xy'; otherwise return empty arrays at x and y
             % coordinates and wavefunction with amplitude in z direction.
-            if amplitudeAxes == 'xy'
-                if arithmeticType == 'sin'
+            if eq(amplitudeAxes, 'xy')
+                if eq(arithmeticType, 'sin')
                     xSin = obj.radius*cos(obj.circleDomain) + obj.amp.*sin(obj.waveDomain).*cos(obj.circleDomain).*cos(obj.freq.*time);
                     ySin = obj.radius*sin(obj.circleDomain) + obj.amp.*sin(obj.waveDomain).*sin(obj.circleDomain).*cos(obj.freq.*time);
                     zSin = transpose(-obj.amp.*sin(obj.freq.*time).*ones(length(xSin), 1));
@@ -140,8 +165,11 @@ classdef Wavefunction
                     zCos = transpose(-obj.amp.*sin(obj.freq.*time).*ones(length(xCos), 1));
                     obj.wavefunc.coordinates = {xCos yCos zCos};
                 end
+                
+                % Sets optimal size of the plot
+                lim = findLimits(obj.wavefunc.coordinates{1});
             else
-                if arithmeticType == 'sin'
+                if eq(arithmeticType, 'sin')
                     xSin = [];
                     ySin = [];
                     zSin = obj.amp.*sin(obj.waveDomain).*cos(obj.freq.*time);
@@ -152,11 +180,11 @@ classdef Wavefunction
                     zCos = obj.amp.*cos(obj.waveDomain).*cos(obj.freq.*time);
                     obj.wavefunc.coordinates = {xCos yCos zCos};
                 end
+                % Sets optimal size of the plot
+                lim = findLimits(obj.wavefunc.coordinates{3});
             end
             
-            % Defining the size of the plot
-            pltBounds = obj.radius + obj.amp;
-            obj.wavefunc.size = [-pltBounds pltBounds -pltBounds pltBounds -pltBounds pltBounds];
+            obj.wavefunc.size = [lim lim lim];
             
             % Returning the structure
             wavefuncion = obj.wavefunc;
