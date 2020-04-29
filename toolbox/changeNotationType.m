@@ -39,9 +39,9 @@ function strNumber = changeNotationType(number, type)
     end
     
     % Define prefix based on the type value
-    if type == 's'
+    if eq(type, 's')
         preffix = "\times10^";
-    elseif type == 'e'
+    elseif eq(type, 'e')
         preffix = "e";
     end
     
