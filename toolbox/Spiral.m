@@ -168,9 +168,9 @@ classdef Spiral
                 % Based on fixedCoordinate sets orientation of the spiral
                 % by assigning a, b and c (c is 'fixed') to appropriate
                 % coordinates x, y and z.
-                if fixedCoordinate == 'x'
+                if eq(fixedCoordinate, 'x')
                     obj.spiral.coordinates = {x+c y+a z+b};
-                elseif fixedCoordinate == 'y'
+                elseif eq(fixedCoordinate, 'y')
                     obj.spiral.coordinates = {x+a y+c z+b};
                 else
                     obj.spiral.coordinates = {x+a y+b z+c};
