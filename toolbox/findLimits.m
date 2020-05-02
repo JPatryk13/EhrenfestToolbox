@@ -3,7 +3,7 @@
 %   lim = findLimits(coordinate)
 %   lim = findLimits(coordinate, displacement)
 %
-%           Input parameters' names:
+%           Input:
 %       'coordinate':       (required), array with numeric values.
 %       'displacement':     0 (default), shift that should be applied to
 %                           the 'coordinate' array.

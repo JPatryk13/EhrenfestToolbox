@@ -7,7 +7,7 @@
 %       generates circle coordinates (x and y of use) and initialises
 %       wavefunction object.
 %
-%           Input parameters' names:
+%           Input:
 %       'radius':       (required), nonnegative number, radius of the
 %                       circle the wavefunction will be plotted on.
 %       'quantumN':     (required), nonnegative, even integer value,
@@ -23,7 +23,7 @@
 %       validates input using WAVEFUNCTION class, assigns data to the
 %       structure.
 %
-%           Input parameters' names:
+%           Input:
 %       'obj':          object of the class.
 %       'time':         (required), nonnegative value, wavefunction is time
 %                       dependent therefore the output coordinates vary

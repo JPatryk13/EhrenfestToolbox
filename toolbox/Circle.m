@@ -8,7 +8,7 @@
 %       circle in 3D space and assigns data (with determined preferred size 
 %       of the plot) to the structure.
 %
-%           Input parameters' names:
+%           Input:
 %       'radius':       (required), nonnegative number, radius of a circle 
 %                       to create
 %       'centrePoint':  [0 0](default), two- or three-dimensional numeric
@@ -121,10 +121,9 @@ classdef Circle
                 obj.circle.coordinates = {x+a y+b};
                 
                 % Sets optimal size of the plot
-                xlim = findLimits(a, x);
-                ylim = findLimits(b, y);
+                lim = findLimits(a, x);
                 
-                obj.circle.size = [xlim ylim];
+                obj.circle.size = [lim lim];
             else
                 % Based on fixedCoordinate sets orientation of the circle
                 % by assigning a, b and c (which is 'fixed') to appropriate
@@ -138,11 +137,9 @@ classdef Circle
                 end
                 
                 % Sets optimal size of the plot
-                xlim = findLimits(a, x);
-                ylim = findLimits(b, y);
-                zlim = findLimits(c, z);
+                lim = findLimits(a, x);
                 
-                obj.circle.size = [xlim ylim zlim];
+                obj.circle.size = [lim lim lim];
             end
         end
         

@@ -7,7 +7,7 @@
 %       constructor, validates user input, defines base properties of the
 %       wavefunction and its domains.
 %
-%           Input parameters' names:
+%           Input:
 %       'radius':       (required), nonnegative number, radius of a circle
 %                       to create.
 %       'quantumN':     (required), nonnegative, even integer value,
@@ -23,7 +23,7 @@
 %       validates input, generates wavefunction of the type specified and 
 %       returns the structure.
 %
-%           Input parameters' names:
+%           Input:
 %       'obj':              object of the class.
 %       'time':             (required), nonnegative value, wavefunction is
 %                           time dependendent therefore the output

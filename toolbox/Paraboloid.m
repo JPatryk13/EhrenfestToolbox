@@ -7,7 +7,7 @@
 %       coordinates and assigns data (with determined size of the plot)
 %       to the structure.
 %
-%           Input parameters' names:
+%           Input:
 %       'semiAxes':     (required), array of numeric values, length of the
 %                       semi-minor and semi-major exes of the ellipse,
 %                       i.e. parameters that dictate the level of curvature
