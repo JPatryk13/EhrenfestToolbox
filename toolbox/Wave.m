@@ -1,4 +1,5 @@
-% WAVE - generating data required to plot a graph of the wavefunction with
+%% WAVE
+% generating data required to plot a graph of the wavefunction with
 % amplitude in z direction.
 %
 %   obj = Wave(radius, quantumN)
@@ -55,6 +56,7 @@
 %       WAVEFUNCTION, GIF, DAVIDOVICRODS, CHANGENOTATIONTYPE, FINDLIMITS
 %
 %   Patryk Jesionka, 2020
+%%
 
 classdef Wave
     properties

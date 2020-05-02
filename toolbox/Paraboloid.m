@@ -1,5 +1,6 @@
-% PARABOLOID - generating data required to plot a paraboloid/hyperboloid
-% surface three-dimensional space.
+%% PARABOLOID
+% generating data required to plot a paraboloid/hyperboloid surface
+% three-dimensional space.
 %
 %   obj = Paraboloid(semiAxes)
 %   obj = Paraboloid(semiAxes, Name, Value)
@@ -54,6 +55,7 @@
 %       WAVE, GIF, DAVIDOVICRODS, CHANGENOTATIONTYPE
 %
 %   Patryk Jesionka, 2019
+%%
 
 classdef Paraboloid
     properties

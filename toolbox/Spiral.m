@@ -1,5 +1,6 @@
-% SPIRAL - generating data required to plot a spiral-shaped trajectory
-% in two- or three-dimensional space.
+%% SPIRAL
+% generating data required to plot a spiral-shaped trajectory in two- or
+% three-dimensional space.
 %
 %   obj = Spiral(rMin, rMax)
 %   obj = Spiral(rMin, rMax, Name, Value) 
@@ -72,6 +73,7 @@
 %       FINDLIMITS
 %
 %   Patryk Jesionka, 2019
+%%
 
 classdef Spiral
     properties

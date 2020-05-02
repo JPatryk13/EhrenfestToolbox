@@ -1,4 +1,5 @@
-% FINDLIMITS - finding maximum and minimum values in a given array.
+%% FINDLIMITS
+% finding maximum and minimum values in a given array.
 %
 %   lim = findLimits(coordinate)
 %   lim = findLimits(coordinate, displacement)
@@ -27,6 +28,7 @@
 %       CHANGENOTATIONTYPE
 %
 %   Patryk Jesionka, 2020
+%%
 
 function lim = findLimits(coordinate, varargin)
     % Define default values

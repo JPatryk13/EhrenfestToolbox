@@ -1,5 +1,5 @@
-% CHANGENOTATIONTYPE - converts numbers into strings in scientific or e
-% notation.
+%% CHANGENOTATIONTYPE
+% converts numbers into strings in scientific or e notation.
 %
 %   strNumber = changeNotationType(number, type)
 %
@@ -28,6 +28,7 @@
 %       ENERGYAPPROXIMATION, WAVE, PLOT, GIF, DAVIDOVICRODS, FINDLIMITS
 %
 %   Patryk Jesionka, 2020
+%%
 
 function strNumber = changeNotationType(number, type)
     % User input validaiton

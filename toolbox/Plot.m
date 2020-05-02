@@ -1,7 +1,8 @@
-% PLOT - Class making an extensive use of other toolbox classes and plot,
-% plot3, surf and tiledLayout Matlab functionalities. It generates 
-% defined-size layout containing tiles which may display 2D or 3D plots or 
-% surfaces with Matlab styling properties. 
+%% PLOT
+% Class making an extensive use of other toolbox classes and plot, plot3,
+% surf and tiledLayout Matlab functionalities. It generates defined-size
+% layout containing tiles which may display 2D or 3D plots or surfaces
+% with Matlab styling properties. 
 %
 %   obj = Plot, constructor.
 %
@@ -172,6 +173,7 @@
 %       FINDLIMITS
 %
 %   Patryk Jesionka, 2019
+%%
 
 classdef Plot
     properties

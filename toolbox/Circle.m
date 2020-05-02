@@ -1,5 +1,6 @@
-% CIRCLE - generating data required to plot a circle in two- or
-% three-dimensional space.
+%% CIRCLE
+% generating data required to plot a circle in two- or three-dimensional
+% space.
 %
 %   obj = Circle(radius)
 %   obj = Circle(radius, Name, Value) 
@@ -60,6 +61,7 @@
 %       FINDLIMITS
 %
 %   Patryk Jesionka, 2019
+%%
  
 classdef Circle
     properties

@@ -1,4 +1,5 @@
-% WAVEFUNCTION - generating data required to plot a flower-shaped graph of
+%% WAVEFUNCTION
+% generating data required to plot a flower-shaped graph of
 % the wavefunction. It draws the amplitude in the same plane as the
 % circular trajectory of a particle.
 %
@@ -69,6 +70,7 @@
 %       WAVE, GIF, DAVIDOVICRODS, CHANGENOTATIONTYPE, FINDLIMITS
 %
 %   Patryk Jesionka, 2019
+%%
 
 classdef Wavefunction
     properties
