@@ -97,7 +97,10 @@ classdef DavidovicRods
             layout = Plot;
             layout = createLayout(layout, m, n);
             for i = 1:length(obj.speed)
-                layout = defineTile(layout, "v=" + changeNotationType(obj.speed(i), 's') + "m/s, r=" + string(obj.radius) + "m", {'x [m]' 'y [m]'}, axis);
+                layout = defineTile(layout, 'title', "v=" + changeNotationType(obj.speed(i), 's') + "m/s, r=" + string(obj.radius) + "m",...
+                                            'axesNames', {'x [m]' 'y [m]'},...
+                                            'size', axis,...
+                                            'legend', 'top-right');
             end
             
             for i = 1:length(obj.speed)
@@ -127,8 +130,11 @@ classdef DavidovicRods
                 
                 % Add plots to a tile
                 for j = 1:obj.noOfRods
-                    layout = addPlot(layout, i, rod(j,:), '-', 'none', 'k', 4, "Tangent");
-                    layout = addPlot(layout, i, r(j,:), '-.', 'none', 'b', 0.5, "Radius");
+                    layout = addPlot(layout, i, rod(j,:), 'lineSpec', '-k',...
+                                                          'lineWidth', 4,...
+                                                          'name', "Tangent");
+                    layout = addPlot(layout, i, r(j,:), 'lineSpec', '-.b',...
+                                                        'name', "Radius");
                 end
             end
             
