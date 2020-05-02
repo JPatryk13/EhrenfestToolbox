@@ -7,10 +7,10 @@ format compact
 % paraboloidEx1
 % paraboloidEx2
 % wavefunctionEx
-% plotEx
+plotEx
 % quantumNEx1
 % quantumNEx2
-waveEx
+% waveEx
 % gifEx
 % davidovicRodsEx
 
@@ -164,36 +164,27 @@ end
 %% PLOT (ex.)
 function plotEx
     % Create two circles
-    radius1 = 5;
-    centrePoint1 = [0 0];
-    fixedCoordinate1 = 'z';
-    radius2 = 3;
-    centrePoint2 = [1 1 1];
-    fixedCoordinate2 = 'z';
-    q = 360;
     
-    circleHandle1 = Circle(radius1, centrePoint1, fixedCoordinate1, q);
+    radius1 = 5;
+    radius2 = 3;
+    
+    circleHandle1 = Circle(radius1, 'centrePoint', [0 0]);
     circle1 = getCircle(circleHandle1);
-    circleHandle2 = Circle(radius2, centrePoint2, fixedCoordinate2, q);
+    
+    circleHandle2 = Circle(radius2, 'centrePoint', [1 1 1]);
     circle2 = getCircle(circleHandle2);
     
     % Create a spiral
     rMin = 1;
     rMax = 5;
-    centrePoint = [0 0];
-    fixedCoordinate = 'z';
-    noOfLaps = 2;
     
-	spiralHandle = Spiral(rMin, rMax, centrePoint, fixedCoordinate, noOfLaps, q);
+	spiralHandle = Spiral(rMin, rMax, 'noOfLaps', 2);
 	spiral = getSpiral(spiralHandle);
     
     % Create a paraboloid
-    centrePoint = [0 0 0];
     semiAxes = [2 2];
-    orientation = '+';
-    meshDens = 2;
     
-	paraboloidHandle = Paraboloid(centrePoint, semiAxes, orientation, meshDens);
+	paraboloidHandle = Paraboloid(semiAxes, 'meshDens', 2);
 	paraboloid = getParaboloid(paraboloidHandle);
     
     % Define m-by-n layout (two tiles)
@@ -204,21 +195,24 @@ function plotEx
 	layout = createLayout(layout, m, n);
     
     % Define tiles
-    title1 = "Circle + Spiral";
-    axesNames1 = {'x', 'y'};
-    size1 = circle1.size;
-    title2 = "Circle + Paraboloid";
-    axesNames2 = {'x', 'y', 'z'};
-    size2 = circle2.size;
-    
-	layout = defineTile(layout, title1, axesNames1, size1);
-	layout = defineTile(layout, title2, axesNames2, size2);
-    
+    layout = defineTile(layout, 'title',        "Circle + Spiral",...
+                                'axesNames',    {'x', 'y'},...
+                                'size',         circle1.size.*2);
+	layout = defineTile(layout, 'title',        "Circle + Paraboloid",...
+                                'axesNames',    {'x', 'y', 'z'},...
+                                'size',         circle2.size.*2);
+                            
     % Add plots/surfaces to tiles
-	layout = addPlot(layout, 1, circle1.coordinates, '--', 'r', 0.5, "Circle");
-	layout = addPlot(layout, 2, circle2.coordinates, '-', 'r', 0.5, "Circle");
-	layout = addPlot(layout, 1, spiral.coordinates, '-', 'b', 0.5, "Spiral");
-	layout = addSurf(layout, 2, paraboloid.coordinates, 'k', '-', 'none', 0, "Paraboloid");
+	layout = addPlot(layout, 1, circle1.coordinates, 'lineSpec',    "--r",...
+                                                     'name',        "Circle");
+	layout = addPlot(layout, 2, circle2.coordinates, 'color',       "#555555",...
+                                                     'name',        "Circle");
+	layout = addPlot(layout, 1, spiral.coordinates, 'color',        'b',...
+                                                    'name',         "Spiral");
+	layout = addSurf(layout, 2, paraboloid.coordinates, 'edgeColor',    [0.8 0.5 0.1],...
+                                                        'faceColor',    'none',...
+                                                        'faceAlpha',    0,...
+                                                        'name',         "Paraboloid");
     
     % Draw the layout
     drawLayout(layout);
@@ -373,6 +367,7 @@ function davidovicRodsEx
     noOfRods = 10;
     radius = 2;
     speed = 0*10^8:0.5*10^8:2.5*10^8;
+    speed = [0*10^8 1.5*10^8];
 
     DavR = DavidovicRods(noOfRods, radius, speed);
     starDisk(DavR);
