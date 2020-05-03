@@ -153,7 +153,7 @@
 %
 %   Updates:
 %       01/04/2020: Addeded support for Marker line specification.
-%       22/04/2020: Added input parser and support for additional plot/surf
+%       02/05/2020: Added input parser and support for additional plot/surf
 %           properties.
 %
 %   Use:
