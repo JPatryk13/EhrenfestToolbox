@@ -155,6 +155,8 @@
 %       01/04/2020: Addeded support for Marker line specification.
 %       02/05/2020: Added input parser and support for additional plot/surf
 %           properties.
+%       03/05/2020: Added support for excluding plot/surf names from a
+%           graph.
 %
 %   Use:
 %       It is recommended to use other classes of the EhrenfestToolbox to 
@@ -209,7 +211,7 @@ classdef Plot
                      'type', 'surface')
     end
     methods (Access = private)
-        function drawPlot(obj, object, dimensions)
+        function handle = drawPlot(obj, object, dimensions)
             % Creating plot object (first assigning coordinates for the
             % sake of explicity)
             x = object.coordinatesArray{1};
@@ -235,14 +237,17 @@ classdef Plot
                 p.Marker = object.marker;
             end
             if ~isDefault(obj, object.markerColor, 'auto')
-                p.MarkerColor = object.markerColor;
+                p.MarkerEdgeColor = object.markerColor;
             end
             if ~isDefault(obj, object.name, 'none')
                 p.DisplayName = object.name;
             end
+            
+            % Return plot handle
+            handle = p;
         end
         
-        function drawSurf(obj, object)
+        function handle = drawSurf(obj, object)
             % Creating surface object (first assigning coordinates for the
             % sake of explicity)
             X = object.surfaceArray{1};
@@ -267,19 +272,24 @@ classdef Plot
             if ~isDefault(obj, object.name, 'none')
                 s.DisplayName = object.name;
             end
+            
+            % Return surf handle
+            handle = s;
         end
         
-        function drawTile(obj, tile)
+        function handles = drawTile(obj, tile)
+            handles = [];
+            
             % Looping through plots
             for j = 1:length(tile.plots)
                 % If it is a 2d plot
                 if tile.dimensions == 2
-                    drawPlot(obj, tile.plots{j}, 2);
+                    handles = [handles, drawPlot(obj, tile.plots{j}, 2)];
                 elseif tile.dimensions == 3 % if it is three-dimensional
                     if tile.plots{j}.type == "plot"
-                        drawPlot(obj, tile.plots{j}, 3);
+                        handles = [handles, drawPlot(obj, tile.plots{j}, 3)];
                     elseif tile.plots{j}.type == "surface"
-                        drawSurf(obj, tile.plots{j});
+                        handles = [handles, drawSurf(obj, tile.plots{j})];
                     end
                 end
             end
@@ -432,6 +442,7 @@ classdef Plot
             tile.legend = legend;
             tile.dimensions = length(axesNames);
             tile.plots = {};
+            tile.handles = [];
             
             % Adds structure to the tile array
             obj.tiles{length(obj.tiles)+1} = tile;
@@ -593,29 +604,43 @@ classdef Plot
                 nexttile
                 
                 hold on
-                drawTile(obj, obj.tiles{i});
+                obj.tiles{i}.handles = drawTile(obj, obj.tiles{i});
                 hold off
                 
                 % Adding properties to each tile
-                view(obj.tiles{i}.dimensions)
+                view(obj.tiles{i}.dimensions);
+                
                 if ~ismember(obj.tiles{i}.legend, {'none'})
-                    lgd = legend;
+                    % Exclude plot/surf 'none' value names from the legend 
+                    names = [];
+                    j = 1;
+                    while j <= length(obj.tiles{i}.handles)
+                        if isDefault(obj, obj.tiles{i}.plots{j}.name, 'none')
+                            obj.tiles{i}.handles(j) = [];
+                            j = j - 1;
+                        else
+                            names = [names, obj.tiles{i}.plots{j}.name];
+                        end
+                        j = j + 1;
+                    end
+                    
+                    lgd = legend(obj.tiles{i}.handles);
+                    lgd.String = names;
                     lgd.Location = obj.tiles{i}.legend;
                 end
+                
                 if ~eq(obj.tiles{i}.title, 'none')
                     title(obj.tiles{i}.title)
                 end
                 
                 xlabel(obj.tiles{i}.axesNames{1})
                 ylabel(obj.tiles{i}.axesNames{2})
-                if obj.tiles{i}.size == 0
-                    axis auto
-                else
-                    axis(obj.tiles{i}.size)
-                end
                 if length(obj.tiles{i}.axesNames) == 3
                     zlabel(obj.tiles{i}.axesNames{3})
                 end
+                
+                axis(obj.tiles{i}.size)
+                
                 grid on
             end
         end
