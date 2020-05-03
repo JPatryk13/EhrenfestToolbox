@@ -92,15 +92,17 @@
 %           Input:
 %       'obj':          object of the class.
 %
-%   drawTile(obj, tile)
+%   handles = drawTile(obj, tile)
 %       (private method) loops through plots/surfaces assigned to the tile,
 %       uses drawPlot and drawSurf functions.
 %
 %           Input:
 %       'obj':          object of the class.
 %       'tile':         (required), tile structure.
+%           Output:
+%       'handles':      handles of plot/surf objects plotted on the tile.
 %
-%   drawPlot(obj, object, dimensions)
+%   handle = drawPlot(obj, object, dimensions)
 %       (private method) uses plot() and plot3() Matlab functions and adds
 %       style properties to the graph.
 %
@@ -110,8 +112,10 @@
 %                       array and style properties.
 %       'dimensions':   (required), numerical value (2 or 3), dictates
 %                       dimensions of the plot.
+%           Output:
+%       'handle':       handle to the plot drawn.
 %
-%   drawSurf(obj, object)
+%   handle = drawSurf(obj, object)
 %       (private method) uses surf() Matlab function and adds style
 %       properties to the graph.
 %
@@ -119,6 +123,8 @@
 %       'obj':          object of the class.
 %       'object':       (required), surface structure containing mesh array
 %                       and style properties.
+%           Output:
+%       'handle':       handle to the surface drawn.
 %
 %   flag = validColorFunc(~, color)
 %       (private method) validate if the string or char array are proper 
