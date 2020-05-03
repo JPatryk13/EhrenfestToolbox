@@ -7,9 +7,9 @@ format compact
 % paraboloidEx1
 % paraboloidEx2
 % wavefunctionEx
-plotEx
+% plotEx
 % quantumNEx1
-% quantumNEx2
+quantumNEx2
 % waveEx
 % gifEx
 % davidovicRodsEx
@@ -164,7 +164,6 @@ end
 %% PLOT (ex.)
 function plotEx
     % Create two circles
-    
     radius1 = 5;
     radius2 = 3;
     
@@ -220,12 +219,11 @@ end
 
 %% QUANTUMN (ex. 1)
 function quantumNEx1
-    input = 15000;
-    type = 'speed';
+    % An electron moves with speed 15000m/s around a circular path of
+    % radius 3000nm 
     radius = 0.000003;
-    relCorrection = false;
 
-    quantumN = QuantumN(input, type, radius, relCorrection);
+    quantumN = QuantumN(radius, 'speed', 15000);
 	list = getTheList(quantumN);
     
     disp(list);
@@ -233,29 +231,31 @@ end
 
 %% QUANTUMN (ex. 2)
 function quantumNEx2
-    % Determine the list of allowed quantum numbers
-    input = 3*10^(-19);
-    type = 'energy';
+    % Determine the list of allowed quantum numbers when an electron with
+    % energy of 3*10^(-19) joules. The radius is 0.1mm, relativisitic
+    % correction is applied.
     radius = 0.0001;
-    relCorrection = true;
-    q = 2000;
 
-    quantumN = QuantumN(input, type, radius, relCorrection);
+    quantumN = QuantumN(radius, 'energy', 3*10^(-19),...
+                                'relCorrection', true);
     list = getTheList(quantumN);
 
     % Generating wavefunction for each quantum number
     time = 0;
-    arythmeticType = 'sin';
-    amplitudeAxes = 'xy';
     
     % Superimposing wavefunction in each x, y, z direction
-    sumx0 = zeros(1, q+1);
-    sumy0 = zeros(1, q+1);
-    sumz0 = zeros(1, q+1);
+    qFactor = 2000; % Number of steps for the function to take when
+                    % generating coordinate arrays
+    
+    sumx0 = zeros(1, qFactor+1);
+    sumy0 = zeros(1, qFactor+1);
+    sumz0 = zeros(1, qFactor+1);
     
     for i = 1:length(list)
-        wavefunctionHandle = Wavefunction(radius, list(i), q);
-        coordinates = getWavefunc(wavefunctionHandle, time, arythmeticType, amplitudeAxes).coordinates;
+        wavefunctionHandle = Wavefunction(radius, list(i), 'q', qFactor);
+        coordinates = getWavefunc(wavefunctionHandle, time).coordinates;
+        limits = getWavefunc(wavefunctionHandle, time).size.*2;
+        
         sumx0 = sumx0 + (1/sqrt((length(list)))).*coordinates{1};
         sumy0 = sumy0 + (1/sqrt((length(list)))).*coordinates{2};
         sumz0 = sumz0 + (1/sqrt((length(list)))).*coordinates{3};
@@ -269,21 +269,27 @@ function quantumNEx2
     layout = createLayout(layout, m, n);
 
     % Define tiles
-    title1 = "Superimposed wavefunction";
-    axesNames1 = {'x', 'y', 'Imaginary axis'};
-    size1 = [0 0 0 0 0 0]; % forces: axis auto
-    title2 = "Decomposed wavefunction";
-    axesNames2 = {'Angle (deg)', 'Spatial coordinate'};
-    size2 = [0 0 0 0];
-
-    layout = defineTile(layout, title1, axesNames1, size1);
-    layout = defineTile(layout, title2, axesNames2, size2);
+    layout = defineTile(layout, 'title', "Superimposed wavefunction",...
+                                'axesNames', {'x', 'y', 'Imaginary axis'},...
+                                'size', limits,...
+                                'legend', 'none');
+    layout = defineTile(layout, 'title', "Decomposed wavefunction",...
+                                'axesNames', {'Angle (deg)', 'Spatial coordinate'});
 
     % Add plots to tiles
-    layout = addPlot(layout, 1, {sumx0 sumy0 sumz0}, '-', 'k', 0.5, "Wavefunction");
-    layout = addPlot(layout, 2, {1:q+1 sumx0}, '-', 'c', 0.5, "X-component");
-    layout = addPlot(layout, 2, {1:q+1 sumy0}, '-', 'm', 0.5, "Y-component");
-    layout = addPlot(layout, 2, {1:q+1 sumz0}, '-', 'g', 0.5, "Imaginary component");
+    pltArray1 = {sumx0 sumy0 sumz0};
+    pltArray2x = {1:qFactor+1 sumx0};
+    pltArray2y = {1:qFactor+1 sumy0};
+    pltArray2z = {1:qFactor+1 sumz0};
+    
+    layout = addPlot(layout, 1, pltArray1, 'color', 'k',...
+                                           'name', "Wavefunction");
+    layout = addPlot(layout, 2, pltArray2x, 'color', 'c',...
+                                            'name', "X-component");
+    layout = addPlot(layout, 2, pltArray2y, 'color', 'm',...
+                                            'name', "Y-component");
+    layout = addPlot(layout, 2, pltArray2z, 'color', 'g',...
+                                            'name', "Imaginary component");
 
     % Draw the layout
     drawLayout(layout);
