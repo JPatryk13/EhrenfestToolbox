@@ -9,10 +9,10 @@ format compact
 % wavefunctionEx
 % plotEx
 % quantumNEx1
-quantumNEx2
+% quantumNEx2
 % waveEx
 % gifEx
-% davidovicRodsEx
+davidovicRodsEx
 
 %% CIRCLE (ex. 1)
 function circleEx1
@@ -370,11 +370,9 @@ end
 
 %% DAVIDOVICRODS (ex.)
 function davidovicRodsEx
-    noOfRods = 10;
     radius = 2;
     speed = 0*10^8:0.5*10^8:2.5*10^8;
-    speed = [0*10^8 1.5*10^8];
 
-    DavR = DavidovicRods(noOfRods, radius, speed);
-    starDisk(DavR);
+    DavR = DavidovicRods(radius, speed);
+    rodLength(DavR);
 end
