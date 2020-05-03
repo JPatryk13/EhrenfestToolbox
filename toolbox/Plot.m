@@ -392,9 +392,21 @@ classdef Plot
             size = p.Results.size;
             legend = p.Results.legend;
             
+            % Adjusting default length of the size vector if the plot is
+            % meant to be three-dimensional instead of two.
+            if length(size) == length(defaultSize)
+                if all(eq(size, defaultSize))
+                    % If size was not specified
+                    if length(axesNames) == 3
+                        % If the plot is meant to be three-dimensional
+                        size = [-inf inf -inf inf -inf inf];
+                    end
+                end
+            end   
+            
             % Additional validation for the axesNames 
             if ~(2*length(axesNames) == length(size))
-                error("For matrices axesNames and size: 2*length(axesNames) = length(size).");
+                error("axesNames must be half the length of size.");
             end
             for i = 1:length(axesNames)
                 if ~(ischar(axesNames{i}) || isstring(axesNames{i}) || isnumeric(axesNames{i}))
