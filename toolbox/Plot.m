@@ -156,7 +156,7 @@
 %       02/05/2020: Added input parser and support for additional plot/surf
 %           properties.
 %       03/05/2020: Added support for excluding plot/surf names from a
-%           graph.
+%           legend.
 %
 %   Use:
 %       It is recommended to use other classes of the EhrenfestToolbox to 
