@@ -33,7 +33,7 @@
 %                           specifies which of the component of the
 %                           wavefunction must be returned with the
 %                           structure.
-%       'amplitudeAxes':    'xy' (required), which type of the data should
+%       'amplitudeAxes':    'xy' (default), which type of the data should
 %                           be returned (see Updates)
 %           Output:
 %       'wavefunction':     structure containing 'coordinates' and 'size'
