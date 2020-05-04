@@ -30,12 +30,20 @@
 %       'obj':              object of the class.
 %
 %   quantNumbers = getTheList(obj)
+%   quantNumbers = getTheList(obj, directQuantNFlag)
 %       return list of quantum numbers
 %
 %           Input:
 %       'obj':              object of the class
+%       'directQuantNFlag': false (default), if specified by user otherwise
+%                           then the function will return row cell array
+%                           with the list of quantum numbers as the first
+%                           element and the list of quantum numbers
+%                           directly calculated from the energy (initial or
+%                           fraction of the initial).
 %           Output:
-%       'quantNumbers':     list of quantum numbers
+%       'quantNumbers':     list of quantum numbers (and optionally direct
+%                           quantum numbers list).
 %
 %   Limitations:
 %       N/A
@@ -69,6 +77,8 @@ classdef QuantumN
         me = 9.1094*10.^(-31); % Electron rest mass
         c = 3*10^8; % Speed of light in vacuum
         
+        % Quantum number value calculated directly from the energy
+        directQuantN = []
         % List storing quantum numbers
         quantNumbers = []
     end
@@ -151,6 +161,16 @@ classdef QuantumN
             % Loop through the process as long as quantum number is greater
             % or equal 2
             while quantumN >= 2
+                % For high energy input quantumN is complex valued, though,
+                % required is  a proper measure giving complex numbers out.
+                % Therefore, the loop is carried out with absolute value of
+                % the number while the direct quantum number is saved
+                % separately.
+                obj.directQuantN = [obj.directQuantN quantumN];
+                if ~isreal(quantumN)
+                    quantumN = abs(quantumN);
+                end
+                
                 if mod(floor(quantumN), 2) == 0
                     % Overwrite the quantum number when its floor is an 
                     % even number
@@ -176,9 +196,33 @@ classdef QuantumN
             end
         end
         
-        function quantNumbers = getTheList(obj)
-            % Return the list of quantum numbers
-            quantNumbers = obj.quantNumbers;
+        function quantNumbers = getTheList(obj, varargin)
+            % Define default values
+            defaultDirectQuantNFlag = false;
+            
+            % Validation functions
+            validDirectQuantNFlag = @(x) isscalar(x) && islogical(x);
+            
+            % Input parser
+            p = inputParser;
+            p.CaseSensitive = true;
+            
+            % Adding arguments
+            addOptional(p, 'directQuantNFlag', defaultDirectQuantNFlag, validDirectQuantNFlag);
+            
+            parse(p, varargin{:});
+            
+            % Extract variables from the parser
+            directQuantNFlag = p.Results.directQuantNFlag;
+            
+            if directQuantNFlag
+                % Return the list of quantum numbers with the direct
+                % quantum number
+                quantNumbers = {obj.quantNumbers obj.directQuantN};
+            else
+                % Return the list of quantum numbers
+                quantNumbers = obj.quantNumbers;
+            end
         end
     end
 end
