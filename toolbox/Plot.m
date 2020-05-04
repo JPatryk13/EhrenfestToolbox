@@ -206,6 +206,7 @@ classdef Plot
                      'marker', [],...
                      'markerColor', [],... 
                      'name', [],...
+                     'noOfFrames', [],...
                      'type', 'plot')
         srf = struct('surfaceArray', [],...
                      'edgeColor', [],...
@@ -214,6 +215,7 @@ classdef Plot
                      'faceColor', [],...
                      'faceAlpha', [],...
                      'name', [],...
+                     'noOfFrames', [],...
                      'type', 'surface')
     end
     methods (Access = private)
@@ -493,7 +495,7 @@ classdef Plot
 
             % Validation functions
             validTileNo = @(x) ge(x, 1) && isreal(x) && isnumeric(x) && eq(floor(x), x) && ge(obj.noOfTiles, x);
-            validPltArray = @(x) iscell(x) && (eq(length(x), 2) || eq(length(x), 3));
+            validPltArray = @(x) iscell(x) && isrow(x) && ge(length(x), 2);
             validLineSpec = @(x) ismember(x, lineSpecSet);
             validLineStyle = @(x) ismember(x, [lineStyleSet 'default']);
             validColor = @(x) validColorFunc(obj, x);
@@ -502,6 +504,10 @@ classdef Plot
             validMarkerColor = @(x) validColorFunc(obj, x);
             validName = @(x) isstring(x) || ischar(x);
             
+            % Validation function for each inner cell of pltArray -
+            % assuming that the number length(pltArray) is greater than
+            % three (potential gif frames).
+            validGifFrame = @(x1, x2) isrow(x1) && isrow(x2) && iscell(x1) && iscell(x2) && eq(length(x1), length(x2)) && (eq(length(x1), 2) || eq(length(x1), 3));
             
             % Input parser
             p = inputParser;
@@ -520,11 +526,34 @@ classdef Plot
 
             parse(p, tileNo, pltArray, varargin{:});
             
-            % Additional validation
+            % Additional validation tileNo and pltArray length
             if ~obj.definedTiles{p.Results.tileNo}
                 error("This tile is not defined!");
             elseif ~(obj.tiles{p.Results.tileNo}.dimensions == length(p.Results.pltArray))
                 error("Tile has different dimensions than the plot you want to add!");
+            end
+            % Additional validation for the pltArray - check if the input
+            % was specified for the gif animation
+            if gt(length(p.Results.pltArray), 3)
+                % It is potential gif input
+                for i = 2:length(p.Results.pltArray)
+                    % Check for validity of each cell according to
+                    % validGifFrame function
+                    if ~validGifFrame(p.Results.pltArray{i-1}, p.Results.pltArray{i})
+                        error("Input pltArray is neither proper plot nor gif input.");
+                    end
+                end
+                % Check if the number of frames is consistent with
+                % other plots
+                if gt(length(obj.tiles{tileNo}), 0) && ~eq(length(p.Results.pltArray), obj.tiles{tileNo}.plots{1}.noOfFrames)
+                    error("Number of frames is too small/large for this tile.");
+                else
+                    % Set number of frames
+                    obj.plt.noOfFrames = length(p.Results.pltArray);
+                end
+            else
+                % Input is for a plot
+                obj.plt.noOfFrames = 1;
             end
 
             % Extract variables from the parser
@@ -557,7 +586,7 @@ classdef Plot
 
             % Validation functions
             validTileNo = @(x) ge(x, 1) && isreal(x) && isnumeric(x) && eq(floor(x), x) && ge(obj.noOfTiles, x);
-            validSrfArray = @(x) iscell(x) && eq(length(x), 3);
+            validSrfArray = @(x) iscell(x) && ge(length(x), 3);
             validEdgeColor = @(x) validColorFunc(obj, x) || ismember(x, {'flat', 'interp'});
             validLineStyle = @(x) ismember(x, lineStyleSet);
             validLineWidth = @(x) ge(x, 0) && isreal(x) && isnumeric(x) && isscalar(x) && isfinite(x);
@@ -565,6 +594,10 @@ classdef Plot
             validFaceAlpha = @(x) ge(x, 0) && ge(0, x) && all(isreal(x)) && all(isscalar(x));
             validName = @(x) isstring(x) || ischar(x);
             
+            % Validation function for each inner cell of srfArray -
+            % assuming that the number length(srfArray) is greater than
+            % three (potential gif frames).
+            validGifFrame = @(x1, x2) iscell(x1) && iscell(x2) && eq(length(x1), length(x2)) && eq(length(x1), 3);
             
             % Input parser
             p = inputParser;
@@ -582,11 +615,34 @@ classdef Plot
 
             parse(p, tileNo, srfArray, varargin{:});
             
-            % Additional validation
+            % Additional validation for tileNo
             if ~obj.definedTiles{p.Results.tileNo}
                 error("This tile is not defined!");
             elseif obj.tiles{p.Results.tileNo}.dimensions == 2
                 error("Tile must be three-dimensional!");
+            end
+            % Additional validation for the srfArray - check if the input
+            % was specified for the gif animation
+            if gt(length(p.Results.srfArray), 3)
+                % It is potential gif input
+                for i = 2:length(p.Results.srfArray)
+                    % Check for validity of each cell according to
+                    % validGifFrame function
+                    if ~validGifFrame(p.Results.srfArray{i-1}, p.Results.srfArray{i})
+                        error("Input srfArray is neither proper surf nor gif input.");
+                    end
+                end
+                % Check if the number of frames is consistent with
+                % other plots
+                if gt(length(obj.tiles{tileNo}), 0) && ~eq(length(p.Results.srfArray), obj.tiles{tileNo}.plots{1}.noOfFrames)
+                    error("Number of frames is too small/large for this tile.");
+                else
+                    % Set number of frames
+                    obj.srf.noOfFrames = length(p.Results.srfArray);
+                end
+            else
+                % Input is for a plot
+                obj.srf.noOfFrames = 1;
             end
 
             % Extract variables from the parser
