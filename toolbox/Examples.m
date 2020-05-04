@@ -14,6 +14,7 @@ format compact
 % gifEx
 % davidovicRodsEx
 % energyApproximationEx
+currentDensityEx
 
 %% CIRCLE (ex. 1)
 function circleEx1
@@ -362,4 +363,15 @@ function energyApproximationEx
     xlabel('Relative speed')
     ylabel('Energy')
     grid on
+end
+
+%% CURRENTDENSITY (ex.)
+function currentDensityEx
+    % Plot change of the current density across the allowed speed range
+    radius = 0.00000003;
+    
+    currentDensityHandle = CurrentDensity(radius, 'relCorrection', true);
+	currentDensity = getCurrentDensity(currentDensityHandle);
+    
+    plot(currentDensity.coordinates{1}, currentDensity.coordinates{2}, 'o');
 end
