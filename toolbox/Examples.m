@@ -13,7 +13,7 @@ format compact
 % waveEx
 % gifEx
 % davidovicRodsEx
-energyApproximationEx
+% energyApproximationEx
 
 %% CIRCLE (ex. 1)
 function circleEx1
@@ -328,45 +328,7 @@ end
 
 %% GIF (ex.)
 function gifEx
-    % Create a circle in 2D (x-y plane) with radius 0.1 - 10, centred at [0, 0]
-    circle1 = [];
-    changeVar1 = 1:0.1:10;
-    for radius = changeVar1
-        circleHandle1 = Circle(radius, [0 0], 'z', 360);
-        circle1 = [circle1 getCircle(circleHandle1)];
-    end
-
-    % % Create a circle in 2D (x-y plane) with radius 10 - 0.1, centred at [0, 0]
-    circle2 = [];
-    changeVar2 = 10:-0.1:1;
-    for radius = changeVar2
-        circleHandle2 = Circle(radius, [0 0], 'z', 360);
-        circle2 = [circle2 getCircle(circleHandle2)];
-    end
-
-    title = "Resizing circles";
-    axesNames = ["x" "y"];
-    size = circle1(length(circle1)).size;
-
-    pltStruct1 = circle1;
-    lStyle1 = '-';
-    lColor1 = 'k';
-    lWidth1 = 0.5;
-    name1 = "Circle #1";
-
-    pltStruct2 = circle2;
-    lStyle2 = '-';
-    lColor2 = 'r';
-    lWidth2 = 0.5;
-    name2 = "Circle #2";
-
-    fileName = "gifs/test.gif";
-
-    gif = Gif;
-    gif = defineTileGif(gif, title, axesNames, size);
-    gif = addPlotGif(gif, pltStruct1, lStyle1, lColor1, lWidth1, name1);
-    gif = addPlotGif(gif, pltStruct2, lStyle2, lColor2, lWidth2, name2);
-    drawGif(gif, fileName);
+    
 end
 
 %% DAVIDOVICRODS (ex.)
