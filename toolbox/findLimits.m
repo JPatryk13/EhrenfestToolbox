@@ -35,7 +35,7 @@ function lim = findLimits(coordinate, varargin)
     defaultDisplacement = 0;
             
     % Validation functions
-    validCoordinate = @(x) all(isnumeric(x)) && all(all(isfinite(x))) && all(isreal(x));
+    validCoordinate = @(x) all(isnumeric(x)) && all(all(isfinite(x)));
     validDisplacement = @(x) isnumeric(x) && isfinite(x) && isreal(x) && isscalar(x);
             
     % Input parser
