@@ -12,7 +12,8 @@ format compact
 % quantumNEx2
 % waveEx
 % gifEx
-davidovicRodsEx
+% davidovicRodsEx
+energyApproximationEx
 
 %% CIRCLE (ex. 1)
 function circleEx1
@@ -375,4 +376,28 @@ function davidovicRodsEx
 
     DavR = DavidovicRods(radius, speed);
     rodLength(DavR);
+end
+
+%% ENERGYAPPROXIMATION (ex.)
+function energyApproximationEx
+    % Compare 2nd and 3rd order power series (classical) approximation to
+    % the electrons energy moving with the speed higher than 0.1c and
+    % smaller than 0.9c. The speed resolution is 0.01.
+    vMin = 0.1;
+    vMax = 0.9;
+    vRes = 0.01;
+
+    enApproxHandle = EnergyApproximation(vMin, vMax, vRes);
+    enApprox1 = getEnergyApproximation(enApproxHandle, 'approximation', 'model', 'classical',...
+                                                                        'order', 2);
+    enApprox2 = getEnergyApproximation(enApproxHandle, 'approximation', 'model', 'classical',...
+                                                                        'order', 3);
+    
+    plot(enApprox1.coordinates{1}, enApprox1.coordinates{2},...
+         enApprox2.coordinates{1}, enApprox2.coordinates{2});
+    
+    view(2)
+    xlabel('Relative speed')
+    ylabel('Energy')
+    grid on
 end
