@@ -124,15 +124,15 @@ classdef CurrentDensity
                     % No correction applied
                     for j = 1:length(list)
                         Current = Current + currentDensity(list(j), radius);
-                        Ek = Ek + kineticEnergyCorrection(list(j), radius);
+                        Ek = Ek + kineticEnergy(list(j), radius);
                     end
                 end
                 
                 % Add current and kinetic energy pools to the list (as
-                % a i^th element). Current density in A*(probability
+                % an i^th element). Current density in A*(probability
                 % density), kinetic energy in eV
-                CurrDens(i) = Current*10^(3);
-                EKinetic(i) = (Ek/obj.e)/(10^3);
+                CurrDens(i) = Current;
+                EKinetic(i) = Ek/obj.e;
             end
             
             obj.currentDensity.coordinates = {EKinetic, CurrDens};
