@@ -1,30 +1,41 @@
 %% MAGNETICFLUX
-% ...
+% (See CURRENTDENSITY description) Calculates quantised magnetic flux
+% density values.
 %
-%   obj = MagneticFlux()
+%   obj = MagneticFlux(radius)
+%   obj = MagneticFlux(radius, Name, Value)
+%       (See CURRENTDENSITY description)
 %
 %           Input:
-%       ...
+%       'radius':           (required), radius of the circular path of an
+%                           electron.
+%       'relCorrection':    false (default), logical value. If set to true,
+%                           correction from perturbation theory is applied. 
+%       'noOfSamples':      100 (default), number of steps the loop should
+%                           take; it can be understood as the quality
+%                           factor used in the other functions.
 %           Output:
-%       'obj':          object of the class
+%       'obj':              object of the class
 %
 %   magneticFlux = getMagneticFlux(obj)
-%       extract generated data.
+%       Extract generated data.
 %
 %           Input:
 %       'obj':              object of the class
 %           Output:
-%       'magneticField':	structure containing 'coordinates' and 'size'
-%                           arrays.
+%       'magneticFlux':     structure containing 'coordinates', 'size' and
+%                           'maxVel' arrays.
 %
 %   Limitations:
-%       ...
+%       N/A
 %
 %   Examples:
-%       ...
+%       Function magneticFluxEx in Examples.m
 %
 %   Use:
-%       ...
+%       The data returned may be used to compare influence of the
+%       perturbation correction on the quantised magnetic flux density of
+%       an electron moving around circular path.
 %
 %   See also:
 %       PARABOLOID, CIRCLE, WAVEFUNCTION, PLOT, QUANTUMN,

@@ -1,12 +1,32 @@
 %% CURRENTDENSITY
-% ...
+% Based on a given radius calculates distribution of the current density
+% values across the energy range from 0 to the energy corresponding to the
+% speed of light in the vacuum for an electron travelling around a circular
+% path. Considers lower speed limitation due to the perturbation if the
+% correction is applied.
 %
 %   obj = CurrentDensity()
+%       Constructor, validates user input, preallocates variables and 
+%       arrays and predefines anonymous function. Loops through the each 
+%       value of the speed specified as a fraction of the speed of light in
+%       the vacuum. QUANTUMN is called in each iteration, therefore, the 
+%       list is supplied to the inner loops - whether the correction is to
+%       be applied or not - then using predefined function for kinetic 
+%       energy and current density adds up the values for each quantum 
+%       number, thus, adding them to appropriate list. Lastly, the function
+%       saves properties into the currentDensity structure. Additionally
+%       maximum velocity allowed is calculated and saved in the structure.
 %
 %           Input:
-%       ...
+%       'radius':           (required), radius of the circular path of an
+%                           electron.
+%       'relCorrection':    false (default), logical value. If set to true,
+%                           correction from perturbation theory is applied. 
+%       'noOfSamples':      100 (default), number of steps the loop should
+%                           take; it can be understood as the quality
+%                           factor used in the other functions.
 %           Output:
-%       'obj':          object of the class
+%       'obj':              object of the class
 %
 %   currentDensity = getCurrentDensity(obj)
 %       extract generated data.
@@ -14,22 +34,24 @@
 %           Input:
 %       'obj':              object of the class
 %           Output:
-%       'currentDensity':	structure containing 'coordinates' and 'size'
-%                           arrays.
+%       'currentDensity':	structure containing 'coordinates', 'size' and
+%                           'maxVel' arrays.
 %
 %   Limitations:
-%       ...
+%       N/A
 %
 %   Examples:
-%       ...
+%       Function currentDensityEx in Examples.m
 %
 %   Use:
-%       ...
+%       The data returned may be used to compare influence of the
+%       perturbation correction on the current density of an electron
+%       moving around circular path.
 %
 %   See also:
 %       PARABOLOID, CIRCLE, WAVEFUNCTION, PLOT, QUANTUMN,
 %       ENERGYAPPROXIMATION, WAVE, GIF, DAVIDOVICRODS, CHANGENOTATIONTYPE,
-%       FINDLIMITS, SPIRAL
+%       FINDLIMITS, SPIRAL, MAGNETICFLUX
 %
 %   Patryk Jesionka, Maciej Makuch 2020
 %%
