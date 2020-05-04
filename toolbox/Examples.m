@@ -14,7 +14,8 @@ format compact
 % gifEx
 % davidovicRodsEx
 % energyApproximationEx
-currentDensityEx
+% currentDensityEx
+magneticFluxEx
 
 %% CIRCLE (ex. 1)
 function circleEx1
@@ -374,4 +375,16 @@ function currentDensityEx
 	currentDensity = getCurrentDensity(currentDensityHandle);
     
     plot(currentDensity.coordinates{1}, currentDensity.coordinates{2}, 'o');
+end
+
+%% MAGNETICFLUX (ex.)
+function magneticFluxEx
+    % Plot change in the quantised magnetic flux density across the allowed
+    % range of speed values
+    radius = 0.00000003;
+    
+    magneticFluxHandle = MagneticFlux(radius, 'relCorrection', true);
+    magneticFlux = getMagneticFlux(magneticFluxHandle);
+    
+    plot(magneticFlux.coordinates{1}, magneticFlux.coordinates{2}, 'o');
 end
