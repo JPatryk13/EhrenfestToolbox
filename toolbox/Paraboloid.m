@@ -22,6 +22,10 @@
 %       'type':         'normal' (default), 'normal' or 'hyperbolic' allows
 %                       for plotting a hyperbolic paraboloid as well.
 %       'meshDens':     1 (default), positive value, density of the mesh.
+%       'rLim':         0 (default), if specified different than zero and
+%                       smaller than semiMajor then plots the paraboloid
+%                       only to the distance from the peak specified by
+%                       rLim.
 %           Output:
 %       'obj':          object of the class
 %
@@ -69,7 +73,8 @@ classdef Paraboloid
             defaultCentrePoint = [0 0 0];
             defaultOrientation = '+';
             defaultType = 'normal';
-            defaultMeshDens = 1;
+            defaultMeshDens = 10;
+            defaultRLim = 0;
             
             % Validation functions
             validSemiAxes = @(x) all(gt(x, 0)) && all(isreal(x)) && all(isnumeric(x)) && all(isfinite(x)) && isrow(x) && eq(length(x), 2);
@@ -77,6 +82,7 @@ classdef Paraboloid
             validOrientation = @(x) ismember(x, {'+', '-'});
             validType = @(x) ismember(x, {'normal', 'hyperbolic'});
             validMeshDens = @(x) gt(x, 0) && isreal(x) && isnumeric(x) && isfinite(x) && isscalar(x);
+            validRLim = @(x) ge(x, 0) && isreal(x) && isnumeric(x) && isfinite(x) && isscalar(x);
             
             % Input parser
             p = inputParser;
@@ -88,6 +94,7 @@ classdef Paraboloid
             addParameter(p, 'orientation', defaultOrientation, validOrientation);
             addParameter(p, 'type', defaultType, validType);
             addParameter(p, 'meshDens', defaultMeshDens, validMeshDens);
+            addParameter(p, 'rLim', defaultRLim, validRLim);
             
             parse(p, semiAxes, varargin{:});
             
@@ -97,6 +104,7 @@ classdef Paraboloid
             orientation = p.Results.orientation;
             type = p.Results.type;
             meshDens = p.Results.meshDens;
+            rLim = p.Results.rLim;
             
             % Separate coordinates of paraboloid's centre and lengths of
             % semi axes
@@ -120,8 +128,29 @@ classdef Paraboloid
             % "Returns 2-D grid coordinates based on the coordinates contained in
             % vectors x and y. X is a matrix where each row is a copy of x, and Y
             % is a matrix where each column is a copy of y."
-            [r, ang] = meshgrid(0:(1/meshDens):semiMajor*10, 0:pi/20:2*pi);
-
+            [r, ang] = meshgrid(0:(1/meshDens):semiMajor, 0:pi/20:2*pi);
+            
+            % Limit the displayed area of the paraboloid if rLim is
+            % different than 0 and smaller than the semi major axis
+            if ~eq(rLim, 0) && gt(semiMajor, rLim)
+                for i = length(r(1,:)):-1:1
+                    % Loop from the last to the first element of the radius
+                    % array removing columns with values greater than
+                    % specified radius.
+                    last = length(r(1,:));
+                    if r(1,last) <= rLim
+                        % Break the loop if the radius value is equal or
+                        % lower then the radius specified
+                        break
+                    else
+                        % Remove the last column from the radius array and
+                        % the angle array to keep the same size
+                        r(:,last) = [];
+                        ang(:,last) = [];
+                    end
+                end
+            end
+            
             % Based on the generated r and ang, creates coordinate matrices
             % and decides on the orientation of the surface
             a = r.*cos(ang);

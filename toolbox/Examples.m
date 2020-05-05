@@ -15,7 +15,7 @@ format compact
 % davidovicRodsEx
 % energyApproximationEx
 % currentDensityEx
-magneticFluxEx
+% magneticFluxEx
 
 %% CIRCLE (ex. 1)
 function circleEx1
