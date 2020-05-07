@@ -152,7 +152,7 @@ function wavefunctionEx
     time = 1;
     
     wavefunctionHandle = Wavefunction(radius, quantumN);
-	wavefunction = getWavefunc(wavefunctionHandle, time);
+	wavefunction = getWavefunc(wavefunctionHandle, 'time', time);
     
 	plot3(wavefunction.coordinates{1}, wavefunction.coordinates{2}, wavefunction.coordinates{3});
 	axis(wavefunction.size)
@@ -242,9 +242,6 @@ function quantumNEx2
     quantumN = QuantumN(radius, 'energy', 3*10^(-19),...
                                 'relCorrection', true);
     list = getTheList(quantumN);
-
-    % Generating wavefunction for each quantum number
-    time = 0;
     
     % Superimposing wavefunction in each x, y, z direction
     qFactor = 2000; % Number of steps for the function to take when
@@ -256,8 +253,8 @@ function quantumNEx2
     
     for i = 1:length(list)
         wavefunctionHandle = Wavefunction(radius, list(i), 'q', qFactor);
-        coordinates = getWavefunc(wavefunctionHandle, time).coordinates;
-        limits = getWavefunc(wavefunctionHandle, time).size.*2;
+        coordinates = getWavefunc(wavefunctionHandle, 'arithmeticType', 'cos').coordinates;
+        limits = getWavefunc(wavefunctionHandle).size.*2;
         
         sumx0 = sumx0 + (1/sqrt((length(list)))).*coordinates{1};
         sumy0 = sumy0 + (1/sqrt((length(list)))).*coordinates{2};
@@ -306,7 +303,6 @@ function waveEx
     
     radius = 0.1;
     quantumN = 8;
-    time = 0;
     
     % Create a circle - wave horizontal axis
     circleHandle = Circle(radius, 'centrePoint', [0 0 0]);
@@ -314,7 +310,7 @@ function waveEx
 
     % Create a wave
     waveHandle = Wave(radius, quantumN);
-    wave = getWave(waveHandle, time, 'arithmeticType', 'cos');
+    wave = getWave(waveHandle, 'arithmeticType', 'cos');
     
     plot3(wave.coordinates{1}, wave.coordinates{2}, wave.coordinates{3}, 'k', circle.coordinates{1}, circle.coordinates{2}, circle.coordinates{3}, '--');
     axis(wave.size)

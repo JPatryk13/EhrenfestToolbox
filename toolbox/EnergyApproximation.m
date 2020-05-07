@@ -32,7 +32,7 @@
 %       'energy':               (required), the data to be returned by the
 %                               function - 'exact', 'approximation', etc.
 %       'model':                'classical' (default)
-%       'order':                1 (default)
+%       'order':                2 (default)
 %                               Both 'model' and 'order' are related to
 %                               data returned by the function, e.g. 
 %                               model=relativistic, order=2 with 
@@ -206,12 +206,12 @@ classdef EnergyApproximation
         function energyApproximation = getEnergyApproximation(obj, energy, varargin)
             % Define default values
             defaultModel = 'classical';
-            defaultOrder = 1;
+            defaultOrder = 2;
             
             % Validation functions
             validEnergy = @(x) ismember(x, {'exact' 'approximation' 'deviation' 'deviationRel'});
             validModel = @(x) ismember(x, {'classical' 'relativistic'});
-            validOrder = @(x) ismember(x, [1 2 3]);
+            validOrder = @(x) ismember(x, [2 3 4]);
             
             % Input parser
             p = inputParser;
@@ -230,6 +230,9 @@ classdef EnergyApproximation
             order = p.Results.order;
             
             xLim = findLimits(obj.relVel);
+            
+            % Use 'order' as indices
+            order = order - 1;
             
             % Return approprate coordinate-pair and size arrays
             % length(energy) = 5(exact), 13(approximation), 9(deviation),

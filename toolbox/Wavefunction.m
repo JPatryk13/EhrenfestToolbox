@@ -12,21 +12,19 @@
 %       'radius':       (required), nonnegative number, radius of a circle
 %                       to create.
 %       'quantumN':     (required), nonnegative, even integer value,
-%                       quantum number for frequency, period and wavedomain
-%                       of the function.
+%                       principal quantum number.
 %       'q':            360 (default), must be positive integer, quality 
 %                       factor (see Updates).
 %           Output:
 %       'obj':          object of the class.
 %
-%   wavefuncion = getWavefunc(obj, time)
-%   wavefuncion = getWavefunc(obj, time, Name, Value) 
+%   wavefuncion = getWavefunc(obj, Name, Value) 
 %       validates input, generates wavefunction of the type specified and 
 %       returns the structure.
 %
 %           Input:
 %       'obj':              object of the class.
-%       'time':             (required), nonnegative value, wavefunction is
+%       'time':             0 (default), nonnegative value, wavefunction is
 %                           time dependendent therefore the output
 %                           coordinates vary with time parameter.
 %       'arithmeticType':   'sin' (default), 'sin' or 'cos' string,
@@ -76,13 +74,12 @@ classdef Wavefunction
     properties
         radius {mustBePositive} % Radius of the electron's path
         
-        hbar = 1.05*10.^(-34); % Modified Planck's constant
-        me = 9.1094*10.^(-31); % Electron rest mass
-        rat % Ratio of Planck's constant and electron rest mass
+        hbar = 1.05*10^(-34) % Reduced Planck's constant
+        h = 6.626*10^(-34)
+        me = 9.1094*10^(-31) % Electron rest mass
         
         freq % Frequency of the wave
         amp % Amplitude of the wave (normalisation constant)
-        period % Time of the one escillation
         
         circleDomain % Range from 0 to 2*pi (generating a circle)
         waveDomain % Range from 0 to 2*n*pi (generating a weve)
@@ -116,21 +113,21 @@ classdef Wavefunction
             quantumN = p.Results.quantumN;
             q = p.Results.q;
                         
-            % Calcualating the ratio
-            obj.rat = obj.hbar/obj.me;
+            % Calcualating the energy
+            energy = ((quantumN^2)*obj.hbar^2)/(2*obj.me*obj.radius^2);
             
-            % defining wave properties
-            obj.freq = ((quantumN.^2).*obj.rat)./(2*(obj.radius.^2));
-            obj.period = (2*pi)/obj.freq;
-            obj.amp = (pi*obj.radius)^(-0.5);
+            % Defining wave properties
+            obj.freq = energy/obj.h;
+            obj.amp = (2*pi*obj.radius)^(-0.5);
             
-            % defining domains
+            % Defining domains
             obj.circleDomain = 0:(2*pi/q):(2*pi);
-            obj.waveDomain = 0:(quantumN*2*pi/q):(quantumN*2*pi);
+            obj.waveDomain = 0:(quantumN*pi/q):(quantumN*pi);
         end
         
-        function wavefuncion = getWavefunc(obj, time, varargin)
+        function wavefuncion = getWavefunc(obj, varargin)
             % Define default values
+            defaultTime = 0;
             defaultArithmeticType = 'sin';
             defaultAmplitudeAxes = 'xy';
             
@@ -144,11 +141,11 @@ classdef Wavefunction
             p.CaseSensitive = true;
             
             % Adding arguments
-            addRequired(p, 'time', validTime);
+            addParameter(p, 'time', defaultTime, validTime);
             addParameter(p, 'arithmeticType', defaultArithmeticType, validArithmeticType);
             addParameter(p, 'amplitudeAxes', defaultAmplitudeAxes, validAmplitudeAxes);
             
-            parse(p, time, varargin{:});
+            parse(p, varargin{:});
             
             % Extract variables from the parser
             time = p.Results.time;
@@ -161,14 +158,14 @@ classdef Wavefunction
             % coordinates and wavefunction with amplitude in z direction.
             if eq(amplitudeAxes, 'xy')
                 if eq(arithmeticType, 'sin')
-                    xSin = obj.radius*cos(obj.circleDomain) + obj.amp.*sin(obj.waveDomain).*cos(obj.circleDomain).*cos(obj.freq.*time);
-                    ySin = obj.radius*sin(obj.circleDomain) + obj.amp.*sin(obj.waveDomain).*sin(obj.circleDomain).*cos(obj.freq.*time);
-                    zSin = transpose(-obj.amp.*sin(obj.freq.*time).*ones(length(xSin), 1));
+                    xSin = obj.radius*cos(obj.circleDomain) + obj.amp.*sin(obj.waveDomain-obj.freq.*time).*cos(obj.circleDomain);
+                    ySin = obj.radius*sin(obj.circleDomain) + obj.amp.*sin(obj.waveDomain-obj.freq.*time).*sin(obj.circleDomain);
+                    zSin = zeros(1, length(xSin));
                     obj.wavefunc.coordinates = {xSin ySin zSin};
                 else
-                    xCos = obj.radius*cos(obj.circleDomain) + obj.amp.*cos(obj.waveDomain).*cos(obj.circleDomain).*cos(obj.freq.*time);
-                    yCos = obj.radius*sin(obj.circleDomain) + obj.amp.*cos(obj.waveDomain).*sin(obj.circleDomain).*cos(obj.freq.*time);
-                    zCos = transpose(-obj.amp.*sin(obj.freq.*time).*ones(length(xCos), 1));
+                    xCos = obj.radius*cos(obj.circleDomain) + obj.amp.*cos(obj.waveDomain-obj.freq.*time).*cos(obj.circleDomain);
+                    yCos = obj.radius*sin(obj.circleDomain) + obj.amp.*cos(obj.waveDomain-obj.freq.*time).*sin(obj.circleDomain);
+                    zCos = zeros(1, length(xCos));
                     obj.wavefunc.coordinates = {xCos yCos zCos};
                 end
                 
@@ -178,12 +175,12 @@ classdef Wavefunction
                 if eq(arithmeticType, 'sin')
                     xSin = [];
                     ySin = [];
-                    zSin = obj.amp.*sin(obj.waveDomain).*cos(obj.freq.*time);
+                    zSin = obj.amp.*sin(obj.waveDomain-obj.freq.*time);
                     obj.wavefunc.coordinates = {xSin ySin zSin};
                 else
                     xCos = [];
                     yCos = [];
-                    zCos = obj.amp.*cos(obj.waveDomain).*cos(obj.freq.*time);
+                    zCos = obj.amp.*cos(obj.waveDomain-obj.freq.*time);
                     obj.wavefunc.coordinates = {xCos yCos zCos};
                 end
                 % Sets optimal size of the plot

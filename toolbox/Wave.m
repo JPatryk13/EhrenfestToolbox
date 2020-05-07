@@ -26,9 +26,9 @@
 %
 %           Input:
 %       'obj':          object of the class.
-%       'time':         (required), nonnegative value, wavefunction is time
-%                       dependent therefore the output coordinates vary
-%                       with time parameter.
+%       'time':         0 (default), nonnegative value, wavefunction is
+%                       time dependent therefore the output coordinates
+%                       vary with time parameter.
 %       'arithmeticType': 'sin' (default), 'sin' or 'cos' string, specifies
 %                       which of the component of the wavefunction must be
 %                       returned with the structure.
@@ -102,8 +102,9 @@ classdef Wave
             obj.wave.size(1:4) = [xlim ylim];
         end
         
-        function wave = getWave(obj, time, varargin)
+        function wave = getWave(obj, varargin)
             % Define default values
+            defaultTime = 0;
             defaultArithmeticType = 'sin';
             
             % Input parser
@@ -111,18 +112,19 @@ classdef Wave
             p.CaseSensitive = true;
             
             % Adding arguments
-            addRequired(p, 'time');
-            addOptional(p, 'arithmeticType', defaultArithmeticType);
+            addParameter(p, 'time', defaultTime);
+            addParameter(p, 'arithmeticType', defaultArithmeticType);
             
-            parse(p, time, varargin{:});
+            parse(p, varargin{:});
             
             % Extract variables from the parser
             time = p.Results.time;
             arithmeticType = p.Results.arithmeticType;
             
             % Return coordinates and the size from the wavefunction object
-            wavefunction = getWavefunc(obj.wavefunctionHandle, time, 'arithmeticType', arithmeticType,...
-                                                                     'amplitudeAxes', 'z');
+            wavefunction = getWavefunc(obj.wavefunctionHandle, 'time', time,...
+                                                               'arithmeticType', arithmeticType,...
+                                                               'amplitudeAxes', 'z');
             
             % Put data in the structure
             obj.wave.coordinates = {obj.circle.coordinates{1} obj.circle.coordinates{2} wavefunction.coordinates{3}};

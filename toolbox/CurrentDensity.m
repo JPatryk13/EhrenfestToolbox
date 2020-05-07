@@ -138,7 +138,7 @@ classdef CurrentDensity
                     % applying relativistic correction
                     for j = 1:length(list)
                         % Add the current density due to a particular quantum number to the pool
-                        Current = Current + lorenzFactor(relVel).*currentDensity(list(j), radius);
+                        Current = Current + lorenzFactor(i*relVel).*currentDensity(list(j), radius);
                         % Add the relativistic energy due to a particular quantum number to the pool
                         Ek = Ek + kineticEnergy(list(j), radius) - kineticEnergyCorrection(list(j), radius);
                     end

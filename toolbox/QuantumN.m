@@ -73,9 +73,9 @@
 
 classdef QuantumN
     properties
-        hbar = 1.05*10.^(-34); % Modified Planck's constant
-        me = 9.1094*10.^(-31); % Electron rest mass
-        c = 3*10^8; % Speed of light in vacuum
+        hbar = 1.05*10.^(-34)   % Reduced Planck's constant
+        me = 9.1094*10.^(-31)   % Electron rest mass
+        c = 3*10^8              % Speed of light in vacuum
         
         % Quantum number value calculated directly from the energy
         directQuantN = []
@@ -162,7 +162,7 @@ classdef QuantumN
             % or equal 2
             while quantumN >= 2
                 % For high energy input quantumN is complex valued, though,
-                % required is  a proper measure giving complex numbers out.
+                % required is a proper measure giving complex numbers out.
                 % Therefore, the loop is carried out with absolute value of
                 % the number while the direct quantum number is saved
                 % separately.
