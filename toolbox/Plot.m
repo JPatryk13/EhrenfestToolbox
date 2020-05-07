@@ -431,7 +431,6 @@ classdef Plot
                     error("axesName must be char, string or numeric type!")
                 end
             end
-                
             
             % Convert legend into a member of legendLocationValueSet
             m = containers.Map(legendLocationKeySet, legendLocationValueSet);
