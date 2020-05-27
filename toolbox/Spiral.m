@@ -1,10 +1,10 @@
 %% SPIRAL
-% generating data required to plot a spiral-shaped trajectory in two- or
+% Generating data required to plot a spiral-shaped trajectory in two- or
 % three-dimensional space.
 %
 %   obj = Spiral(rMin, rMax)
 %   obj = Spiral(rMin, rMax, Name, Value) 
-%       constructor, validates user input, generates arrays of 
+%       Constructor, validates user input, generates arrays of 
 %       coordinates*, based on the 'fixedCoordinate' decides on the 
 %       orientation of the spiral in 3D space and assigns data (with 
 %       determined preferred size of the plot) to the structure.
@@ -28,19 +28,19 @@
 %       'q':            360 (default), must be positive integer, quality 
 %                       factor (see Updates).
 %           Output:
-%       'obj':          object of the class
+%       'obj':          object of the class.
 %
 %   spiral = getSpiral(obj)
 %       extract generated data.
 %
 %           Input:
-%       'obj':          object of the class
+%       'obj':          object of the class.
 %           Output:
 %       'spiral':       structure containing 'coordinates' and 'size'
 %                       arrays.
 %
 %   [a, b] = generateSpiral(obj)
-%       private method, performing an actual generation of the spiral
+%       Private method, performing an actual generation of the spiral
 %       coordinates based on the radii range and angle array.
 %       
 %           Input:
@@ -70,19 +70,16 @@
 %   See also:
 %       PARABOLOID, CIRCLE, WAVEFUNCTION, PLOT, QUANTUMN,
 %       ENERGYAPPROXIMATION, WAVE, GIF, DAVIDOVICRODS, CHANGENOTATIONTYPE,
-%       FINDLIMITS
+%       FINDLIMITS, CURRENTDENSITY, MAGNETICFLUX
 %
 %   Patryk Jesionka, 2019
 %%
 
 classdef Spiral
     properties
-        % Variables required to appear in the private function. Defined as
-        % class' properties for the sake of convenience.
-        % rMax (later r), rMin: 'starting' and 'ending' radii of the spiral
-        rMin
-        rMax
-        ang % Angle range of a spiral with defined step
+        rMin        % Radius of the inner circle
+        rMax        % Radius of the outer circle
+        ang         % Angle range of a spiral with defined step
         
        % Structure to be returned with coordinates and default dimensions
        % of the plot
@@ -134,11 +131,14 @@ classdef Spiral
             
             % Extract variables from the parser
             obj.rMin = p.Results.rMin;
-            if p.Results.rMax > obj.rMin % Check if rMax is greater than rMin
+            
+            % Check if rMax is greater than rMin
+            if p.Results.rMax > obj.rMin
                 obj.rMax = p.Results.rMax;
             else
                 error("rMax must be greater than rMin.");
             end
+            
             centrePoint = p.Results.centrePoint;
             fixedCoordinate = p.Results.fixedCoordinate;
             noOfLaps = p.Results.noOfLaps;
