@@ -1,11 +1,11 @@
 %% QUANTUMN
-% based on given linear speed of an electron and radius of its circular
+% Based on given linear speed of an electron and radius of its circular
 % path it calcualtes quantum numbers of electron's allowed quantum states.
 % 
 %   obj = QuantumN(radius, 'speed', speedValue)
 %   obj = QuantumN(radius, 'energy', energyValue)
 %   obj = QuantumN(radius, Name, Value)
-%       constructor, validates input, calculates initial values of the
+%       Constructor, validates input, calculates initial values of the
 %       energy (classical kinetic energy) and quantum number. It utilises
 %       while loop to determine the range of *allowed quantum numbers.
 %       
@@ -31,10 +31,10 @@
 %
 %   quantNumbers = getTheList(obj)
 %   quantNumbers = getTheList(obj, directQuantNFlag)
-%       return list of quantum numbers
+%       Return list of quantum numbers.
 %
 %           Input:
-%       'obj':              object of the class
+%       'obj':              object of the class.
 %       'directQuantNFlag': false (default), if specified by user otherwise
 %                           then the function will return row cell array
 %                           with the list of quantum numbers as the first
@@ -66,7 +66,7 @@
 %   See also:
 %       PARABOLOID, SPIRAL, WAVEFUNCTION, PLOT, CIRCLE,
 %       ENERGYAPPROXIMATION, WAVE, GIF, DAVIDOVICRODS, CHANGENOTATIONTYPE,
-%       FINDLIMITS
+%       FINDLIMITS, CURRENTDENSITY, MAGNETICFLUX
 %
 %   Patryk Jesionka, Maciej Makuch, 2019
 %%
@@ -77,10 +77,9 @@ classdef QuantumN
         me = 9.1094*10.^(-31)   % Electron rest mass
         c = 3*10^8              % Speed of light in vacuum
         
-        % Quantum number value calculated directly from the energy
-        directQuantN = []
-        % List storing quantum numbers
-        quantNumbers = []
+        directQuantN = []       % Quantum number value calculated directly
+                                % from the energy
+        quantNumbers = []       % List storing quantum numbers
     end
     methods
         function obj = QuantumN(radius, varargin)
@@ -129,7 +128,7 @@ classdef QuantumN
                 % Input is the speed
                 if relCorrection
                     % Considering relativistic approximation
-                    initialEnergy = restMassEnergy/sqrt(1-(speed/obj.c)^2) - restMassEnergy;
+                    initialEnergy = restMassEnergy/sqrt(1 - (speed/obj.c)^2) - restMassEnergy;
                 else
                     % Considering classical system - no correction
                     initialEnergy = (obj.me*speed^2)/2;
@@ -190,7 +189,8 @@ classdef QuantumN
                 % Overwrite energy with the quantum energy subtracted from
                 % the initial energy (the value from the past iteration or
                 % the classical initial energy)
-                initialEnergy = initialEnergy - (unperturbedEnergy(quantumN) - correction(quantumN));
+                initialEnergy = initialEnergy -...
+                    (unperturbedEnergy(quantumN) - correction(quantumN));
                 
                 quantumN = quantumNFunc(initialEnergy);
             end
