@@ -1,25 +1,25 @@
 %% WAVEFUNCTION
-% generating data required to plot a flower-shaped graph of
+% Generating data required to plot a flower-shaped graph of
 % the wavefunction. It draws the amplitude in the same plane as the
 % circular trajectory of a particle.
 %
 %   obj = Wavefunction(radius, quantumN)
 %   obj = Wavefunction(radius, quantumN, q)
-%       constructor, validates user input, defines base properties of the
+%       Constructor, validates user input, defines base properties of the
 %       wavefunction and its domains.
 %
 %           Input:
-%       'radius':       (required), nonnegative number, radius of a circle
-%                       to create.
-%       'quantumN':     (required), nonnegative, even integer value,
-%                       principal quantum number.
-%       'q':            360 (default), must be positive integer, quality 
-%                       factor (see Updates).
+%       'radius':           (required), nonnegative number, radius of
+%                           a circle to create.
+%       'quantumN':         (required), nonnegative, even integer value,
+%                           principal quantum number.
+%       'q':                360 (default), must be positive integer, 
+%                           quality factor (see Updates).
 %           Output:
-%       'obj':          object of the class.
+%       'obj':              object of the class.
 %
 %   wavefuncion = getWavefunc(obj, Name, Value) 
-%       validates input, generates wavefunction of the type specified and 
+%       Validates input, generates wavefunction of the type specified and 
 %       returns the structure.
 %
 %           Input:
@@ -32,7 +32,7 @@
 %                           wavefunction must be returned with the
 %                           structure.
 %       'amplitudeAxes':    'xy' (default), which type of the data should
-%                           be returned (see Updates)
+%                           be returned (see Updates).
 %           Output:
 %       'wavefunction':     structure containing 'coordinates' and 'size'
 %                           arrays.
@@ -65,7 +65,8 @@
 %
 %   See also:
 %       PARABOLOID, SPIRAL, CIRCLE, PLOT, QUANTUMN, ENERGYAPPROXIMATION,
-%       WAVE, GIF, DAVIDOVICRODS, CHANGENOTATIONTYPE, FINDLIMITS
+%       WAVE, GIF, DAVIDOVICRODS, CHANGENOTATIONTYPE, FINDLIMITS,
+%       CURRENTDENSITY, MAGNETICFLUX
 %
 %   Patryk Jesionka, 2019
 %%
@@ -74,17 +75,19 @@ classdef Wavefunction
     properties
         radius {mustBePositive} % Radius of the electron's path
         
-        hbar = 1.05*10^(-34) % Reduced Planck's constant
-        h = 6.626*10^(-34)
-        me = 9.1094*10^(-31) % Electron rest mass
+        hbar = 1.05*10^(-34)    % Reduced Planck constant
+        h = 6.626*10^(-34)      % Planck constant
+        me = 9.1094*10^(-31)    % Electron rest mass
         
-        freq % Frequency of the wave
-        amp % Amplitude of the wave (normalisation constant)
+        freq                    % Frequency of the wave
+        amp                     % Amplitude of the wave (normalisation
+                                % constant)
         
-        circleDomain % Range from 0 to 2*pi (generating a circle)
-        waveDomain % Range from 0 to 2*n*pi (generating a weve)
+        circleDomain            % Range from 0 to 2*pi (circle)
+        waveDomain              % Range from 0 to 2*n*pi (wave)
         
-        % Structure to be returned with coordinates and dimensions of the plot
+        % Structure to be returned with coordinates and dimensions of 
+        % the plot
         wavefunc = struct('coordinates', [], 'size', [])
     end
     methods
@@ -158,14 +161,18 @@ classdef Wavefunction
             % coordinates and wavefunction with amplitude in z direction.
             if eq(amplitudeAxes, 'xy')
                 if eq(arithmeticType, 'sin')
-                    xSin = obj.radius*cos(obj.circleDomain) + obj.amp.*sin(obj.waveDomain-obj.freq.*time).*cos(obj.circleDomain);
-                    ySin = obj.radius*sin(obj.circleDomain) + obj.amp.*sin(obj.waveDomain-obj.freq.*time).*sin(obj.circleDomain);
+                    xSin = obj.radius*cos(obj.circleDomain) + obj.amp.*sin(obj.waveDomain - obj.freq.*time).*cos(obj.circleDomain);
+                    ySin = obj.radius*sin(obj.circleDomain) + obj.amp.*sin(obj.waveDomain - obj.freq.*time).*sin(obj.circleDomain);
+                    
                     zSin = zeros(1, length(xSin));
+                    
                     obj.wavefunc.coordinates = {xSin ySin zSin};
                 else
-                    xCos = obj.radius*cos(obj.circleDomain) + obj.amp.*cos(obj.waveDomain-obj.freq.*time).*cos(obj.circleDomain);
-                    yCos = obj.radius*sin(obj.circleDomain) + obj.amp.*cos(obj.waveDomain-obj.freq.*time).*sin(obj.circleDomain);
+                    xCos = obj.radius*cos(obj.circleDomain) + obj.amp.*cos(obj.waveDomain - obj.freq.*time).*cos(obj.circleDomain);
+                    yCos = obj.radius*sin(obj.circleDomain) + obj.amp.*cos(obj.waveDomain - obj.freq.*time).*sin(obj.circleDomain);
+                    
                     zCos = zeros(1, length(xCos));
+                    
                     obj.wavefunc.coordinates = {xCos yCos zCos};
                 end
                 
@@ -175,14 +182,19 @@ classdef Wavefunction
                 if eq(arithmeticType, 'sin')
                     xSin = [];
                     ySin = [];
+                    
                     zSin = obj.amp.*sin(obj.waveDomain-obj.freq.*time);
+                    
                     obj.wavefunc.coordinates = {xSin ySin zSin};
                 else
                     xCos = [];
                     yCos = [];
+                    
                     zCos = obj.amp.*cos(obj.waveDomain-obj.freq.*time);
+                    
                     obj.wavefunc.coordinates = {xCos yCos zCos};
                 end
+                
                 % Sets optimal size of the plot
                 lim = findLimits(obj.wavefunc.coordinates{3});
             end
