@@ -1,10 +1,10 @@
 %% WAVE
-% generating data required to plot a graph of the wavefunction with
+% Generating data required to plot a graph of the wavefunction with
 % amplitude in z direction.
 %
 %   obj = Wave(radius, quantumN)
 %   obj = Wave(radius, quantumN, q)
-%       constructor, validates input using CIRCLE and WAVEFUCNTION classes,
+%       Constructor, validates input using CIRCLE and WAVEFUCNTION classes,
 %       generates circle coordinates (x and y of use) and initialises
 %       wavefunction object.
 %
@@ -21,7 +21,7 @@
 %
 %   wave = getWave(obj, time)
 %   wave = getWave(obj, time, arithmeticType)
-%       validates input using WAVEFUNCTION class, assigns data to the
+%       Validates input using WAVEFUNCTION class, assigns data to the
 %       structure.
 %
 %           Input:
@@ -53,19 +53,22 @@
 %
 %   See also:
 %       PARABOLOID, SPIRAL, CIRCLE, PLOT, QUANTUMN, ENERGYAPPROXIMATION,
-%       WAVEFUNCTION, GIF, DAVIDOVICRODS, CHANGENOTATIONTYPE, FINDLIMITS
+%       WAVEFUNCTION, GIF, DAVIDOVICRODS, CHANGENOTATIONTYPE, FINDLIMITS,
+%       CURRENTDENSITY, MAGNETICFLUX
 %
 %   Patryk Jesionka, 2020
 %%
 
 classdef Wave
     properties
-        wavefunctionHandle % Handle for the Wavefunction object
+        wavefunctionHandle      % Handle for the Wavefunction object
         
         % Structure containing coordinates and dimensions of the circle the
         % wavefunction should be plotted on
         circle = struct('coordinates', [], 'size', [])
-        % Structure to be returned with coordinates and dimensions of the plot
+        
+        % Structure to be returned with coordinates and dimensions of
+        % the plot
         wave = struct('coordinates', [], 'size', [])
     end
     methods
@@ -122,9 +125,10 @@ classdef Wave
             arithmeticType = p.Results.arithmeticType;
             
             % Return coordinates and the size from the wavefunction object
-            wavefunction = getWavefunc(obj.wavefunctionHandle, 'time', time,...
-                                                               'arithmeticType', arithmeticType,...
-                                                               'amplitudeAxes', 'z');
+            wavefunction = getWavefunc(obj.wavefunctionHandle,...
+                'time', time,...
+                'arithmeticType', arithmeticType,...
+                'amplitudeAxes', 'z');
             
             % Put data in the structure
             obj.wave.coordinates = {obj.circle.coordinates{1} obj.circle.coordinates{2} wavefunction.coordinates{3}};
