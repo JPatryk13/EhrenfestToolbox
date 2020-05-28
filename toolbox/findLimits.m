@@ -1,5 +1,5 @@
 %% FINDLIMITS
-% finding maximum and minimum values in a given array.
+% Finding maximum and minimum values in a given array.
 %
 %   lim = findLimits(coordinate)
 %   lim = findLimits(coordinate, displacement)
@@ -25,7 +25,7 @@
 %   See also:
 %       PARABOLOID, SPIRAL, CIRCLE, WAVEFUNCTION, QUANTUMN,
 %       ENERGYAPPROXIMATION, WAVE, PLOT, GIF, DAVIDOVICRODS,
-%       CHANGENOTATIONTYPE
+%       CHANGENOTATIONTYPE, CURRENTDENSITY, MAGNETICFLUX
 %
 %   Patryk Jesionka, 2020
 %%
@@ -54,5 +54,11 @@ function lim = findLimits(coordinate, varargin)
     
     % Finding minimum and maximum values in the array; double min/max
     % function to get rid of the multiplicity of limits.
-    lim = [min(min(a)) + da, max(max(a)) + da];
+    if min(min(a)) == max(max(a))
+        % If min = max then return inf values - they set the axis() to
+        % default (optimal) value
+        lim = [-inf inf];
+    else
+        lim = [min(min(a)) + da, max(max(a)) + da];
+    end
 end
