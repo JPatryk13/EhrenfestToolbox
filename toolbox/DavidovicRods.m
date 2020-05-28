@@ -6,7 +6,7 @@
 %
 %   obj = DavidovicRods(radius, speed)
 %   obj = DavidovicRods(radius, speed, 'noOfRods', noOfRodsVal)
-%       constructor, validates input and performs initial calculations
+%       Constructor, validates input and performs initial calculations
 %       carried out throughout the class' functions.
 %
 %           Input:
@@ -20,21 +20,21 @@
 %       'obj':          object of the class.
 %
 %   starDisk(obj)
-%       function plots graph(s) of star disc with respective rods' lengths.
+%       Function plots graph(s) of star disc with respective rods' lengths.
 %       Uses PLOT class to designate tiled layout.
 %
 %           Input:
 %       'obj':          object of the class.
 %
 %   rodLength(obj)
-%       funtion plots linear regression of the rod length across the whole
+%       Funtion plots linear regression of the rod length across the whole
 %       allowed speed range. Adds markers for user-defined speed values.
 %
 %           Input:
 %       'obj':          object of the class.
 %
 %   gifBoth(obj)
-%       function creates an animation of the changing rod length w.r.t
+%       Function creates an animation of the changing rod length w.r.t
 %       speed against the rods' length regression - two-plot tiled layout.
 %       >> Function to be created <<
 %
@@ -57,22 +57,24 @@
 %   See also:
 %       PARABOLOID, SPIRAL, CIRCLE, WAVEFUNCTION, QUANTUMN,
 %       ENERGYAPPROXIMATION, WAVE, PLOT, GIF, CHANGENOTATIONTYPE,
-%       FINDLIMITS
+%       FINDLIMITS, CURRENTDENSITY, MAGNETICFLUX
 %
 %   Patryk Jesionka, 2020
 %%
 
 classdef DavidovicRods
     properties
-        noOfRods {mustBeGreaterThan(noOfRods, 2), mustBeInteger} % Number of rods
-        speed = [] % Array of linear speeds of the rotating disc
-        radius {mustBeGreaterThan(radius, 0)} % Radius of the inner circle
+        noOfRods            % Number of rods
         
-        c = 2.998*10^8; % Speed of light
+        speed = []          % Array of linear speeds of the rotating disc
+        radius              % Radius of the inner circle
         
-        % Functions describing Lorenz factor and beta angle (described in the constructor)
-        gammaFunc = @(v, c) 1./(1-(v.^2./c^2)); % Lorenz factor as a function of speed (v)
-        betaFunc = @(g, n) 360./(2*n*g); % Beta angle as a function of Lorenz factor (g)
+        c = 2.998*10^8;     % Speed of light
+        
+        % Functions describing Lorenz factor and beta angle (described in
+        % the constructor).
+        gammaFunc = @(v, c) 1./(1-(v.^2./c^2));
+        betaFunc = @(g, n) 360./(2*n*g);
         
         % Properties described in the constructor
         gamma
@@ -89,7 +91,8 @@ classdef DavidovicRods
             
             % Validation functions
             validRadius = @(x) gt(x, 0) && isreal(x) && isnumeric(x) && isfinite(x) && isscalar(x);
-            validSpeed = @(x) all(ge(x, 0)) && all(ge(3*10^8, x)) && all(isreal(x)) && all(isnumeric(x)) && (isscalar(x) || (isrow(x) && ~iscell(x) && (ismember(length(x), [1 3]) || eq(mod(length(x), 2), 0))));
+            validSpeed = @(x) all(ge(x, 0)) && all(ge(3*10^8, x)) &&  all(isreal(x)) && all(isnumeric(x)) &&...
+                              (isscalar(x) || (isrow(x) && ~iscell(x) && (ismember(length(x), [1 3]) || eq(mod(length(x), 2), 0))));
             validNoOfRods = @(x) gt(x, 2) && isreal(x) && isnumeric(x) && isfinite(x) && isscalar(x) && eq(floor(x), x);
             
             % Input parser
@@ -139,7 +142,8 @@ classdef DavidovicRods
             layout = Plot;
             layout = createLayout(layout, m, n);
             for i = 1:length(obj.speed)
-                layout = defineTile(layout, 'title', "v=" + changeNotationType(obj.speed(i), 's') + "m/s, r=" + string(obj.radius) + "m",...
+                title = "v=" + changeNotationType(obj.speed(i), 's') + "m/s, r=" + string(obj.radius) + "m";
+                layout = defineTile(layout, 'title', title,...
                                             'axesNames', {'x [m]' 'y [m]'},...
                                             'size', axis,...
                                             'legend', 'none');
@@ -148,14 +152,16 @@ classdef DavidovicRods
             for i = 1:length(obj.speed)
                 % Empty array for storing rod's coordinates
                 rod = {};
-                % Empty array for storing radii pointing the middle of each rod coordinates
+                % Empty array for storing radii pointing the middle of each
+                % rod coordinates
                 r = {};
                 
                 % Calculate end-point coordinates for rods and radii
                 for j = 1:obj.noOfRods
                     ang = (j-1)*(360/obj.noOfRods);
 
-                    % Calculating coordinates of each of the end points of the rod
+                    % Calculating coordinates of each of the end points of
+                    % the rod
                     x1 = obj.a(i)*sind(ang - obj.beta(i));
                     y1 = obj.a(i)*cosd(ang - obj.beta(i));
                     x2 = obj.a(i)*sind(ang + obj.beta(i));
@@ -208,14 +214,15 @@ classdef DavidovicRods
             layout = Plot;
             layout = createLayout(layout, 1, 1);
             layout = defineTile(layout, 'title', "Rod length vs linear speed",...
-                                        'axesNames', {'Speed [m/s]' 'Rod length [m]'});
+                                        'axesNames', {'Speed [m/s]'...
+                                        'Rod length [m]'});
             % Linear regression of the rod length
             layout = addPlot(layout, 1, {speedDomain, rodLenDomain}, 'color', 'r',...
                                                                      'name', "Change of length of a rod");
             % Markers for each defined speed step
             layout = addPlot(layout, 1, {obj.speed, rodLen}, 'lineSpec', 'o',...
                                                              'markerColor', 'k',...
-                                                             'name', "Rod length for an arbitrary" + newline + "chosen speed values");
+                                                             'name', "Rod length for" + newline + "chosen speed values");
             % Vertical and horizontal lines pointing markers
             for i = 1:length(obj.speed)
                 layout = addPlot(layout, 1, {[0 obj.speed(i)] [rodLen(i) rodLen(i)]}, 'lineSpec', '--k');
