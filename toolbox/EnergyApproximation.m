@@ -1,12 +1,12 @@
 %% ENERGYAPPROXIMATION
-% based on a given speed range and speed resolution calculate: energy exact
+% Based on a given speed range and speed resolution calculate: energy exact
 % value, energy approximation, approximation deviation from the exact
 % value, deviation relative to the exact value. Thus, given is choice of 
 % the output of the get-function. 
 % 
 %   obj = EnergyApproximation(minVel, maxVel)
 %   obj = EnergyApproximation(minVel, maxVel, step)
-%       constructor, validates user input. Calculates relative velocity -
+%       Constructor, validates user input. Calculates relative velocity -
 %       to be treated as horizontal (x) coordinate and exact, approximated
 %       values of the energy as well as relative/non-relative deviation
 %       from the exact energy value - to be treated as the vertical
@@ -25,14 +25,14 @@
 %
 %   energyApproximation = getEnergyApproximation(obj, energy)
 %   energyApproximation = getEnergyApproximation(obj, energy, Name, Value)
-%       ...
+%       Return the data requested.
 %
 %           Input:
 %       'obj':                  object of the class.
 %       'energy':               (required), the data to be returned by the
 %                               function - 'exact', 'approximation', etc.
-%       'model':                'classical' (default)
-%       'order':                2 (default)
+%       'model':                'classical' (default)...
+%       'order':                2 (default)...
 %                               Both 'model' and 'order' are related to
 %                               data returned by the function, e.g. 
 %                               model=relativistic, order=2 with 
@@ -80,38 +80,35 @@
 %       order approximation of the energy of an electron treated classicaly
 %       or relativistically. The data allow to show how the approximate
 %       values deviate from the exact value. Ideally to be used with PLOT
-%       class, however, built-in MATLAB classes are not unrecommended.
+%       class, however, built-in MATLAB classes are NOT unrecommended.
 %
 %   See also:
 %       PARABOLOID, SPIRAL, WAVEFUNCTION, PLOT, CIRCLE,
-%       QUANTUMN, WAVE, GIF, DAVIDOVICRODS, CHANGENOTATIONTYPE, FINDLIMITS
+%       QUANTUMN, WAVE, GIF, DAVIDOVICRODS, CHANGENOTATIONTYPE, FINDLIMITS,
+%       CURRENTDENSITY, MAGNETICFLUX
 %
 %   Patryk Jesionka, Maciej Makuch, 2019
 %%
 
 classdef EnergyApproximation
     properties
-        % Constants
-        m = 9.109*10^(-31); % Electron mass
-        c = 2.998*10^(8); % Speed of light
+        m = 9.109*10^(-31);     % Electron mass
+        c = 2.998*10^(8);       % Speed of light
         
-        % Velocity relative to the spee of light
-        relVel
+        relVel                  % Velocity relative to the spee of light
         
-        % Energy exact value
-        exactValue
+        exactValue              % Energy exact value
 
         % Classical and relativistic approximation of the energy value
         classicalApprox
         relativisticApprox
 
-        % Classical and relativistic energy deviation from the exact
-        % value
+        % Classical and relativistic energy deviation from the exact value
         classicalDev
         relativisticDev
 
-        % Classical and relativistic energy deviation from the exact
-        % value relative to the exact value
+        % Classical and relativistic energy deviation from the exact value
+        % relative to the exact value
         classicalDevRel
         relativisticDevRel
         
@@ -119,10 +116,11 @@ classdef EnergyApproximation
     end
     methods (Access = private)
         function approx = powSeriesApprox(obj, p)
-            % 2nd, 3rd and 4th order power series approximations for kinetic energy
-            approx_2nd = (obj.m*(obj.c^2)).*(0.5.*((p./(obj.m*obj.c)).^2) - 0.125.*((p./(obj.m*obj.c)).^4));
-            approx_3rd = (approx_2nd + (1/16).*((p./(obj.m*obj.c)).^6));
-            approx_4th = (approx_3rd - (5/144).*((p./(obj.m*obj.c)).^8));
+            % 2nd, 3rd and 4th order power series approximations for
+            % kinetic energy
+            approx_2nd = (obj.m*obj.c^2).*(0.5.*((p./(obj.m*obj.c)).^2) - 0.125.*((p./(obj.m*obj.c)).^4));
+            approx_3rd = (approx_2nd + (obj.m*obj.c^2).*(1/16).*((p./(obj.m*obj.c)).^6));
+            approx_4th = (approx_3rd - (obj.m*obj.c^2).*(5/144).*((p./(obj.m*obj.c)).^8));
             
             approx = {approx_2nd approx_3rd approx_4th};
         end
@@ -130,12 +128,14 @@ classdef EnergyApproximation
         function dev = standardDeviation(obj, p)
             approx = powSeriesApprox(obj, p);
             
-            % Standard deviation of the power series approximations from energy
+            % Standard deviation of the power series approximations from
+            % energy
             dev_2nd_comp1 = (((obj.exactValue.^2) - (approx{1}.^2)).^0.5);
             dev_3rd_comp1 = (((obj.exactValue.^2) - (approx{2}.^2)).^0.5);
             dev_4th_comp1 = (((obj.exactValue.^2) - (approx{3}.^2)).^0.5);
             
-            % Standard deviation of energy from the power series approximations
+            % Standard deviation of energy from the power series
+            % approximations
             dev_2nd_comp2 = ((-(obj.exactValue.^2) + (approx{1}.^2)).^0.5);
             dev_3rd_comp2 = ((-(obj.exactValue.^2) + (approx{2}.^2)).^0.5);
             dev_4th_comp2 = ((-(obj.exactValue.^2) + (approx{3}.^2)).^0.5);
@@ -195,12 +195,14 @@ classdef EnergyApproximation
             
             % Classical and relativistic energy deviation from the exact
             % value relative to the exact value
-            obj.classicalDevRel = { obj.classicalDev{1}./obj.exactValue,...
-                                    obj.classicalDev{2}./obj.exactValue,...
-                                    obj.classicalDev{3}./obj.exactValue};
-            obj.relativisticDevRel = { obj.relativisticDev{1}./obj.exactValue,...
-                                       obj.relativisticDev{2}./obj.exactValue,...
-                                       obj.relativisticDev{3}./obj.exactValue};
+            obj.classicalDevRel = {
+                obj.classicalDev{1}./obj.exactValue,...
+                obj.classicalDev{2}./obj.exactValue,...
+                obj.classicalDev{3}./obj.exactValue};
+            obj.relativisticDevRel = {
+                obj.relativisticDev{1}./obj.exactValue,...
+                obj.relativisticDev{2}./obj.exactValue,...
+                obj.relativisticDev{3}./obj.exactValue};
         end
         
         function energyApproximation = getEnergyApproximation(obj, energy, varargin)
@@ -242,6 +244,7 @@ classdef EnergyApproximation
                 case 5
                     energyApproximation.coordinates = {obj.relVel obj.exactValue};
                     energyApproximation.size = [xLim findLimits(obj.exactValue)];
+                    
                 case 13
                     if length(model) == 9
                         energyApproximation.coordinates = {obj.relVel obj.classicalApprox{order}};
@@ -250,6 +253,7 @@ classdef EnergyApproximation
                         energyApproximation.coordinates = {obj.relVel obj.relativisticApprox{order}};
                         energyApproximation.size = [xLim findLimits(obj.relativisticApprox{order})];
                     end
+                    
                 case 9
                     if length(model) == 9
                         energyApproximation.coordinates = {obj.relVel obj.classicalDev{order}};
@@ -258,6 +262,7 @@ classdef EnergyApproximation
                         energyApproximation.coordinates = {obj.relVel obj.relativisticDev{order}};
                         energyApproximation.size = [xLim findLimits(obj.relativisticDev{order})];
                     end
+                    
                 otherwise
                     if length(model) == 9
                         energyApproximation.coordinates = {obj.relVel obj.classicalDevRel{order}};
