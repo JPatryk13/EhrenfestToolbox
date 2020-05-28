@@ -1,3 +1,11 @@
+%% EXAMPLES
+% The code is meant to present working classes of the toolbox. The features
+% explored are not suppose to reveal errors but showcase the potential
+% possibilities and use of each of classes.
+%
+% Patryk Jesionka, 2020
+%%
+
 format compact
 
 % circleEx1
@@ -11,7 +19,6 @@ format compact
 % quantumNEx1
 % quantumNEx2
 % waveEx
-% gifEx
 % davidovicRodsEx
 % energyApproximationEx
 % currentDensityEx
@@ -42,8 +49,7 @@ function circleEx2
     
     radius = 3.14;
     
-    circleHandle = Circle(radius, 'centrePoint', [0 3.14 3.14],...
-                                  'fixedCoordinate', 'x');
+    circleHandle = Circle(radius, 'centrePoint', [0 3.14 3.14], 'fixedCoordinate', 'x');
     circle = getCircle(circleHandle);
     
     plot3(circle.coordinates{1}, circle.coordinates{2}, circle.coordinates{3});
@@ -205,16 +211,16 @@ function plotEx
                                 'size',         circle2.size.*2);
                             
     % Add plots/surfaces to tiles
-	layout = addPlot(layout, 1, circle1.coordinates, 'lineSpec',    "--r",...
-                                                     'name',        "Circle");
-	layout = addPlot(layout, 2, circle2.coordinates, 'color',       "#555555",...
-                                                     'name',        "Circle");
-	layout = addPlot(layout, 1, spiral.coordinates, 'color',        'b',...
-                                                    'name',         "Spiral");
-	layout = addSurf(layout, 2, paraboloid.coordinates, 'edgeColor',    [0.8 0.5 0.1],...
-                                                        'faceColor',    'none',...
-                                                        'faceAlpha',    0,...
-                                                        'name',         "Paraboloid");
+	layout = addPlot(layout, 1, circle1.coordinates, 'lineSpec', "--r",...
+                                                     'name', "Circle");
+	layout = addPlot(layout, 2, circle2.coordinates, 'color', "#555555",...
+                                                     'name', "Circle");
+	layout = addPlot(layout, 1, spiral.coordinates, 'color', 'b',...
+                                                    'name', "Spiral");
+	layout = addSurf(layout, 2, paraboloid.coordinates, 'edgeColor', [0.8 0.5 0.1],...
+                                                        'faceColor', 'none',...
+                                                        'faceAlpha', 0,...
+                                                        'name', "Paraboloid");
     
     % Draw the layout
     drawLayout(layout);
@@ -237,6 +243,7 @@ function quantumNEx2
     % Determine the list of allowed quantum numbers when an electron with
     % energy of 3*10^(-19) joules. The radius is 0.1mm, relativisitic
     % correction is applied.
+    
     radius = 0.0001;
 
     quantumN = QuantumN(radius, 'energy', 3*10^(-19),...
@@ -312,7 +319,8 @@ function waveEx
     waveHandle = Wave(radius, quantumN);
     wave = getWave(waveHandle, 'arithmeticType', 'cos');
     
-    plot3(wave.coordinates{1}, wave.coordinates{2}, wave.coordinates{3}, 'k', circle.coordinates{1}, circle.coordinates{2}, circle.coordinates{3}, '--');
+    plot3(wave.coordinates{1}, wave.coordinates{2}, wave.coordinates{3}, 'k',...
+          circle.coordinates{1}, circle.coordinates{2}, circle.coordinates{3}, '--');
     axis(wave.size)
     
     view(3)
@@ -324,13 +332,10 @@ function waveEx
     grid on
 end
 
-%% GIF (ex.)
-function gifEx
-    
-end
-
 %% DAVIDOVICRODS (ex.)
 function davidovicRodsEx
+    % Plot change of the rod length for 0.0c to 2.5c speed input
+
     radius = 2;
     speed = 0*10^8:0.5*10^8:2.5*10^8;
 
@@ -343,6 +348,7 @@ function energyApproximationEx
     % Compare 2nd and 3rd order power series (classical) approximation to
     % the electrons energy moving with the speed higher than 0.1c and
     % smaller than 0.9c. The speed resolution is 0.01.
+    
     vMin = 0.1;
     vMax = 0.9;
     vRes = 0.01;
@@ -365,6 +371,7 @@ end
 %% CURRENTDENSITY (ex.)
 function currentDensityEx
     % Plot change of the current density across the allowed speed range
+    
     radius = 0.00000003;
     
     currentDensityHandle = CurrentDensity(radius, 'relCorrection', true);
@@ -377,6 +384,7 @@ end
 function magneticFluxEx
     % Plot change in the quantised magnetic flux density across the allowed
     % range of speed values
+    
     radius = 0.00000003;
     
     magneticFluxHandle = MagneticFlux(radius, 'relCorrection', true);
