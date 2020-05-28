@@ -15,13 +15,13 @@
 %                           take; it can be understood as the quality
 %                           factor used in the other functions.
 %           Output:
-%       'obj':              object of the class
+%       'obj':              object of the class.
 %
 %   magneticFlux = getMagneticFlux(obj)
 %       Extract generated data.
 %
 %           Input:
-%       'obj':              object of the class
+%       'obj':              object of the class.
 %           Output:
 %       'magneticFlux':     structure containing 'coordinates', 'size' and
 %                           'maxVel' arrays.
@@ -52,9 +52,12 @@ classdef MagneticFlux
         e = 1.6022*10^(-19);            % electron charge
         me = 9.1094*10^(-31);           % electron rest mass
         c = 3*10^8;                     % speed of light in vacuum
-        restMassEnergy = (9.1094*10.^(-31))*((3*10^8)^2); % energy due to mass
         
-        % Structure to be returned with coordinates and dimensions of the plot
+        % energy due to mass
+        restMassEnergy = (9.1094*10.^(-31))*((3*10^8)^2);
+        
+        % Structure to be returned with coordinates and dimensions
+        % of the plot
         magneticFlux = struct('coordinates', [], 'size', [], 'maxVel', [])
     end
     methods
@@ -95,15 +98,14 @@ classdef MagneticFlux
             
             % Current density and kinetic energy functions
             magnFlux = @(n, r) (obj.hbar.*n)./(2.*obj.e.*(r.^2));
-            kineticEnergy = @(n, r) ((n.^2).*(obj.hbar.^2))./(2.*obj.me.*(r.^2));
+            kineticEnergy = @(n, r) ((n.^2).*(obj.hbar.^2))./ (2.*obj.me.*(r.^2));
             kineticEnergyCorrection = @(n, r) (1/(2*obj.restMassEnergy))*(((n^2)*(obj.hbar^2))/(2*obj.me*(r^2)))^2;
             % Where, v - relative velocity
             %        n - quantum number
             %        r - radius
             
             for i = 1:noOfSamples
-                quantumN = QuantumN(radius, 'speed', i*relVel,...
-                                            'relCorrection', relCorrection);
+                quantumN = QuantumN(radius, 'speed', i*relVel, 'relCorrection', relCorrection);
                 quantumN = getTheList(quantumN, true);
                 
                 % The case when getTheList function returned complex number
@@ -125,9 +127,11 @@ classdef MagneticFlux
                     % Loop through all returned quantum numbers list
                     % applying relativistic correction
                     for j = 1:length(list)
-                        % Add the magnetic flux due to a particular quantum number to the pool
+                        % Add the magnetic flux due to a particular quantum
+                        % number to the pool
                         B = B + magnFlux(list(j), radius);
-                        % Add the relativistic energy due to a particular quantum number to the pool
+                        % Add the relativistic energy due to a particular 
+                        % quantum number to the pool
                         Ek = Ek + kineticEnergy(list(j), radius) - kineticEnergyCorrection(list(j), radius);
                     end
                 else
