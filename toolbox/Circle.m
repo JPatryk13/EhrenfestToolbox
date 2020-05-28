@@ -1,17 +1,17 @@
 %% CIRCLE
-% generating data required to plot a circle in two- or three-dimensional
+% Generating data required to plot a circle in two- or three-dimensional
 % space.
 %
 %   obj = Circle(radius)
 %   obj = Circle(radius, Name, Value) 
-%       constructor, validates user input, generates arrays of coordinates,
+%       Constructor, validates user input, generates arrays of coordinates,
 %       based on the 'fixedCoordinate' decides on the orientation of the
-%       circle in 3D space and assigns data (with determined preferred size 
+%       circle in 3D space and assigns data (with determined minimum size 
 %       of the plot) to the structure.
 %
 %           Input:
 %       'radius':       (required), nonnegative number, radius of a circle 
-%                       to create
+%                       to create.
 %       'centrePoint':  [0 0](default), two- or three-dimensional numeric
 %                       row array, number of elements determines whether
 %                       the plot will be 2D or 3D; it is the centre of a
@@ -24,13 +24,13 @@
 %       'q':            360 (default), must be positive integer, quality 
 %                       factor (see Updates).
 %           Output:
-%       'obj':          object of the class
+%       'obj':          object of the class.
 %
 %   circle = getCircle(obj)
 %       extract generated data.
 %
 %           Input:
-%       'obj':          object of the class
+%       'obj':          object of the class.
 %           Output:
 %       'circle':       structure containing 'coordinates' and 'size' 
 %                       arrays.
@@ -58,7 +58,7 @@
 %   See also:
 %       PARABOLOID, SPIRAL, WAVEFUNCTION, PLOT, QUANTUMN,
 %       ENERGYAPPROXIMATION, WAVE, GIF, DAVIDOVICRODS, CHANGENOTATIONTYPE, 
-%       FINDLIMITS
+%       FINDLIMITS, CURRENTDENSITY, MAGNETICFLUX
 %
 %   Patryk Jesionka, 2019
 %%
@@ -123,9 +123,10 @@ classdef Circle
                 obj.circle.coordinates = {x+a y+b};
                 
                 % Sets optimal size of the plot
-                lim = findLimits(a, x);
+                limx = findLimits(a, x);
+                limx = findLimits(b, y);
                 
-                obj.circle.size = [lim lim];
+                obj.circle.size = [limx limx];
             else
                 % Based on fixedCoordinate sets orientation of the circle
                 % by assigning a, b and c (which is 'fixed') to appropriate
@@ -139,9 +140,11 @@ classdef Circle
                 end
                 
                 % Sets optimal size of the plot
-                lim = findLimits(a, x);
+                limx = findLimits(a, x);
+                limy = findLimits(b, y);
+                limz = findLimits(c, z);
                 
-                obj.circle.size = [lim lim lim];
+                obj.circle.size = [limx limy limz];
             end
         end
         
