@@ -1,5 +1,5 @@
 %% CHANGENOTATIONTYPE
-% converts numbers into strings in scientific or e notation.
+% Converts numbers into strings in scientific or e notation.
 %
 %   strNumber = changeNotationType(number, type)
 %
@@ -7,9 +7,9 @@
 %       'number':       float value that meant to be converted to string
 %                       and displayed with scientific notation.
 %       'type':         char, either 's' or 'e' - decides on whether 
-%                       scientific or e notation should be used 
+%                       scientific or e notation should be used.
 %           Output:
-%       'strNumber':    converted number as a string of characters
+%       'strNumber':    converted number as a string of characters.
 %
 %   Limitations:
 %       Rounds output value to two decimal places. Can handle numbers from
@@ -25,7 +25,8 @@
 %
 %   See also:
 %       PARABOLOID, SPIRAL, CIRCLE, WAVEFUNCTION, QUANTUMN,
-%       ENERGYAPPROXIMATION, WAVE, PLOT, GIF, DAVIDOVICRODS, FINDLIMITS
+%       ENERGYAPPROXIMATION, WAVE, PLOT, GIF, DAVIDOVICRODS, FINDLIMITS,
+%       CURRENTDENSITY, MAGNETICFLUX
 %
 %   Patryk Jesionka, 2020
 %%
@@ -56,6 +57,5 @@ function strNumber = changeNotationType(number, type)
             end
         end
     end
-    
 end
 
