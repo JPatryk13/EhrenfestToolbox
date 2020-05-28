@@ -1,10 +1,10 @@
 %% PARABOLOID
-% generating data required to plot a paraboloid/hyperboloid surface
+% Generating data required to plot a paraboloid/hyperboloid surface
 % three-dimensional space.
 %
 %   obj = Paraboloid(semiAxes)
 %   obj = Paraboloid(semiAxes, Name, Value)
-%       constructor, validates user input, generates matrices of 
+%       Constructor, validates user input, generates matrices of 
 %       coordinates and assigns data (with determined size of the plot)
 %       to the structure.
 %
@@ -27,13 +27,13 @@
 %                       only to the distance from the peak specified by
 %                       rLim.
 %           Output:
-%       'obj':          object of the class
+%       'obj':          object of the class.
 %
 %   paraboloid = getParaboloid(obj)
-%       extract generated data.
+%       Extract generated data.
 %
 %           Input:
-%       'obj':          object of the class
+%       'obj':          object of the class.
 %           Output:
 %       'paraboloid':   structure containing 'coordinates' and 'size'
 %                       arrays.
@@ -125,9 +125,10 @@ classdef Paraboloid
             % Determine semi-major axis
             semiMajor = max([semX semY]);
             
-            % "Returns 2-D grid coordinates based on the coordinates contained in
-            % vectors x and y. X is a matrix where each row is a copy of x, and Y
-            % is a matrix where each column is a copy of y."
+            % "Returns 2-D grid coordinates based on the coordinates
+            % contained in vectors x and y. X is a matrix where each row is
+            % a copy of x, and Y is a matrix where each column is a copy of
+            % y."
             [r, ang] = meshgrid(0:(1/meshDens):semiMajor, 0:pi/20:2*pi);
             
             % Limit the displayed area of the paraboloid if rLim is
