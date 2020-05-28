@@ -63,10 +63,15 @@ classdef CurrentDensity
         e = 1.6022*10^(-19);            % electron charge
         me = 9.1094*10^(-31);           % electron rest mass
         c = 3*10^8;                     % speed of light in vacuum
-        restMassEnergy = (9.1094*10.^(-31))*((3*10^8)^2); % energy due to mass
         
-        % Structure to be returned with coordinates and dimensions of the plot
-        currentDensity = struct('coordinates', [], 'size', [], 'maxVel', [])
+        % energy due to mass
+        restMassEnergy = (9.1094*10.^(-31))*((3*10^8)^2);
+        
+        % Structure to be returned with coordinates and dimensions
+        % of the plot
+        currentDensity = struct('coordinates', [],...
+                                'size', [],...
+                                'maxVel', [])
     end
     methods
         function obj = CurrentDensity(radius, varargin)
@@ -104,10 +109,15 @@ classdef CurrentDensity
             CurrDens = zeros(1, noOfSamples);
             EKinetic = zeros(1, noOfSamples);
             
-            % Current density and kinetic energy functions
+            % Lorenz factor as a function of speed
             lorenzFactor = @(v) 1./sqrt(1 - (v/obj.c).^2);
+            % Current density as a function of quantum number and radius of
+            % electron's path
             currentDensity = @(n, r) (obj.e.*obj.hbar.*n)./(4.*pi.*(r.^2).*obj.me);
+            % Kinetic energy as a function of quantum number and radius
             kineticEnergy = @(n, r) ((n.^2).*(obj.hbar.^2))./(2.*obj.me.*(r.^2));
+            % Correction to the kinetic energy as a function of quantum
+            % umber and radius
             kineticEnergyCorrection = @(n, r) (1/(2*obj.restMassEnergy))*(((n^2)*(obj.hbar^2))/(2*obj.me*(r^2)))^2;
             % Where, v - relative velocity
             %        n - quantum number
@@ -137,9 +147,11 @@ classdef CurrentDensity
                     % Loop through all returned quantum numbers list
                     % applying relativistic correction
                     for j = 1:length(list)
-                        % Add the current density due to a particular quantum number to the pool
+                        % Add the current density due to a particular
+                        % quantum number to the pool
                         Current = Current + lorenzFactor(i*relVel).*currentDensity(list(j), radius);
-                        % Add the relativistic energy due to a particular quantum number to the pool
+                        % Add the relativistic energy due to a particular
+                        % quantum number to the pool
                         Ek = Ek + kineticEnergy(list(j), radius) - kineticEnergyCorrection(list(j), radius);
                     end
                 else
