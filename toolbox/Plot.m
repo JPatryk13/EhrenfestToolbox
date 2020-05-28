@@ -4,13 +4,14 @@
 % layout containing tiles which may display 2D or 3D plots or surfaces
 % with Matlab styling properties. 
 %
-%   obj = Plot, constructor.
+%   obj = Plot
+%       Constructor.
 %
 %           Output:
 %       'obj': object of the class.
 %
 %   obj = createLayout(obj, m, n)
-%       uses built-in (tiledLayout() function) validation and creates m by
+%       Uses built-in (tiledLayout() function) validation and creates m by
 %       n tiled layout, saves number of tiles and assignes False flags
 %       (since tiles are not defined yet) to each of them.
 %       
@@ -23,7 +24,7 @@
 %
 %   obj = defineTile(obj)
 %   obj = defineTile(obj, Name, Value)
-%       validates input, assigns data to the tile structure, then adds it
+%       Validates input, assigns data to the tile structure, then adds it
 %       to the tiles array and updates definedTiles flag.
 %       
 %           Input:
@@ -43,7 +44,7 @@
 %
 %   obj = addPlot(obj, tileNo, pltArray)
 %   obj = addPlot(obj, tileNo, pltArray, Name, Value)
-%       validates input, adds plot to the tile existing in the tiles array.
+%       Validates input, adds plot to the tile existing in the tiles array.
 %
 %           Input:
 %       'obj':          object of the class.
@@ -67,7 +68,7 @@
 %
 %   obj = addSurf(obj, tileNo, srfArray)
 %   obj = addSurf(obj, tileNo, srfArray, Name, Value)
-%       validates input, adds plot to the tile existing in the tiles array.
+%       Validates input, adds plot to the tile existing in the tiles array.
 %
 %           Input:
 %       'obj':          object of the class.
@@ -87,7 +88,7 @@
 %       'obj':          object of the class.
 %
 %   drawLayout(obj)
-%       loops through each tile, uses drawTile function.
+%       Loops through each tile, uses drawTile function.
 %
 %           Input:
 %       'obj':          object of the class.
@@ -178,25 +179,23 @@
 %   See also:
 %       PARABOLOID, SPIRAL, CIRCLE, WAVEFUNCTION, QUANTUMN,
 %       ENERGYAPPROXIMATION, WAVE, GIF, DAVIDOVICRODS, CHANGENOTATIONTYPE,
-%       FINDLIMITS
+%       FINDLIMITS, CURRENTDENSITY, MAGNETICFLUX
 %
 %   Patryk Jesionka, 2019
 %%
 
 classdef Plot
     properties
-        % Tiled layout handle 
-        layout
-        % Number of tiles available - used to validate if user specified
-        % existing tile_no
-        noOfTiles {mustBePositive} = 1
-        % Contains information whether the certain tile was defined or not
-        definedTiles = {}
+        layout              % Tiled layout handle
         
-        % Array containing structures for every tile
-        tiles = {}
-        % Structure containing its pieces of information and plots
-        % tile = struct('title', [], 'axesNames', [], 'size', [], 'dimensions', [], 'plots', {})
+        noOfTiles = 1       % Number of tiles available - used to validate
+                            % if user specified existing tile_no
+                            
+        definedTiles = {}   % Contains information whether the certain tile
+                            % was defined or not
+        
+        tiles = {}          % Array containing structures for every tile
+        
         % Structure containing plots data
         plt = struct('coordinatesArray', [],...
                      'lineSpec', [],...
@@ -208,6 +207,7 @@ classdef Plot
                      'name', [],...
                      'noOfFrames', [],...
                      'type', 'plot')
+                 
         srf = struct('surfaceArray', [],...
                      'edgeColor', [],...
                      'lineStyle', [],...
@@ -309,8 +309,11 @@ classdef Plot
             
             % Define memberships sets
             colorShortNameSet = {'r' 'g' 'b' 'c' 'm' 'y' 'k' 'w'};
-            colorNameSet = {'red' 'green' 'blue' 'cyan' 'magenta' 'yellow' 'black' 'white' 'none'};
-            hexSet = ['0' '1' '2' '3' '4' '5' '6' '7' '8' '9' 'A' 'a' 'B' 'b' 'C' 'c' 'D' 'd' 'E' 'e' 'F' 'f'];
+            colorNameSet = {'red' 'green' 'blue'...
+                            'cyan' 'magenta' 'yellow'...
+                            'black' 'white' 'none'};
+            hexSet = ['0' '1' '2' '3' '4' '5' '6' '7' '8' '9' 'A'...
+                      'a' 'B' 'b' 'C' 'c' 'D' 'd' 'E' 'e' 'F' 'f'];
             
             % Anonymous validation functions for colors
             validRGBTriplet = @(x) isrow(x) && eq(length(x), 3) && all(ge(x, 0)) && all(ge(1, x)) && all(isreal(x));
@@ -367,8 +370,8 @@ classdef Plot
                 obj.layout = tiledlayout(m, n);
                 obj.noOfTiles = m*n;
 
-                % Iterates through the number of tiles and adds false values 
-                % since tiles are not defined yet
+                % Iterates through the number of tiles and adds false 
+                % values since tiles are not defined yet
                 for i = 1:obj.noOfTiles
                     obj.definedTiles{i} = false;
                 end
@@ -382,9 +385,28 @@ classdef Plot
             defaultSize = [-inf inf -inf inf];
             defaultLegend = 'top-right';
             
-            % Define membership sets
-            legendLocationKeySet = {'top' 'bottom' 'right' 'left' 'top-right' 'top-left' 'bottom-right' 'bottom-left' 'top-out' 'bottom-out' 'right-out' 'left-out' 'top-right-out' 'top-left-out' 'bottom-right-out' 'bottom-left-out' 'best' 'best-out' 'none'};
-            legendLocationValueSet = {'north' 'south' 'east' 'west' 'northeast' 'northwest' 'southeast' 'southwest' 'northoutside' 'southoutside' 'eastoutside' 'westoutside' 'northeastoutside' 'northwestoutside' 'southeastoutside' 'southwestoutside' 'best' 'bestoutside' 'none'};
+            % Define membership sets - legendLocationKeySet defines more
+            % understandable options in terms of location of the legend,
+            % thus, they are to be specified by the user, then translated
+            % into the MATLAB values - stored in the legendLocationValueSet
+            legendLocationKeySet = {'top' 'bottom' 'right' 'left'...
+                                    'top-right' 'top-left'...
+                                    'bottom-right' 'bottom-left'...
+                                    'top-out' 'bottom-out' 'right-out'...
+                                    'left-out' 'top-right-out'...
+                                    'top-left-out' 'bottom-right-out'...
+                                    'bottom-left-out' 'best' 'best-out'...
+                                    'none'};
+            legendLocationValueSet = {'north' 'south' 'east' 'west'...
+                                      'northeast' 'northwest'...
+                                      'southeast' 'southwest'...
+                                      'northoutside' 'southoutside'...
+                                      'eastoutside' 'westoutside'...
+                                      'northeastoutside'...
+                                      'northwestoutside'...
+                                      'southeastoutside'...
+                                      'southwestoutside' 'best'...
+                                      'bestoutside' 'none'};
             
             % Validation functions
             validTitle = @(x) isstring(x) || ischar(x);
@@ -531,6 +553,7 @@ classdef Plot
             elseif ~(obj.tiles{p.Results.tileNo}.dimensions == length(p.Results.pltArray))
                 error("Tile has different dimensions than the plot you want to add!");
             end
+            
             % Additional validation for the pltArray - check if the input
             % was specified for the gif animation
             if gt(length(p.Results.pltArray), 3)
@@ -620,6 +643,7 @@ classdef Plot
             elseif obj.tiles{p.Results.tileNo}.dimensions == 2
                 error("Tile must be three-dimensional!");
             end
+            
             % Additional validation for the srfArray - check if the input
             % was specified for the gif animation
             if gt(length(p.Results.srfArray), 3)
